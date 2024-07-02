@@ -1,0 +1,11 @@
+node_modules
+public
+.env
+.idea
+.vscode
+.env.db
+Makefile
+yarn.lock
+*.cert
+*.key
+*.pem
