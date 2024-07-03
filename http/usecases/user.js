@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 const Models = require("../../schema/main/models");
 const Utils = require('../../util/utils');
 const { Op } = require('sequelize');
+const moment = require('moment')
 
-exports.create = async (data) => {
+exports.create = async (creator_id, data) => {
 
     const { password, username, ...body } = data;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -13,7 +14,7 @@ exports.create = async (data) => {
         defaults: {
             ...body,
             password: hashedPassword,
-            creator_id: req.user.id
+            creator_id: creator_id
         },
     });
 
@@ -31,8 +32,8 @@ exports.create = async (data) => {
     }
     await Models.user_file.bulkCreate(files, { ignoreDuplicates: true });
 
-
-    return user;
+    
+    return await getUser(user.id);
 
 
 
@@ -85,21 +86,8 @@ exports.getAll = async (options) => {
 }
 
 exports.getOne = async (id) => {
-    let user = await Models.user.findOne({
-        where: { id: id },
-        include: [{
-            model: Models.user_file, as: "files"
-        }, {
-            model: Models.role, as: 'role'
-        }]
-    });
-    if (!user) {
-        let err = new Error('User not found');
-        err.statusCode = 404;
-        throw err;
-    }
-
-    return user;
+    
+    return await getUser(id);
 }
 
 exports.update = async (id, data) => {
@@ -131,7 +119,7 @@ exports.update = async (id, data) => {
     }
     await Models.user_file.bulkCreate(files, { ignoreDuplicates: true });
 
-    return _user[0];
+    return await getUser(id);
 }
 
 exports.delete = async function (id) {
@@ -148,4 +136,22 @@ exports.delete = async function (id) {
 
 exports.getRoles = async function () {
     return await Models.role.findAll({});
+}
+
+async function getUser(id){
+    let user = await Models.user.findOne({
+        where: { id: id },
+        attributes: {exclude: ['password']},
+        include: [{
+            model: Models.user_file, as: "files"
+        }, {
+            model: Models.role, as: 'role'
+        }]
+    });
+    if (!user) {
+        let err = new Error('User not found');
+        err.statusCode = 404;
+        throw err;
+    }
+    return user;
 }

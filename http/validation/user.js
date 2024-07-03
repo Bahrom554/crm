@@ -13,6 +13,7 @@ const user = {
       files: Joi.array().optional().items(Joi
          .object().keys({
              filename: Joi.string().required(),
+             original_name: Joi.string().required(),
              name: Joi.string().required(),
          })),
 
@@ -32,6 +33,7 @@ const user = {
       files: Joi.array().optional().items(Joi
          .object().keys({
              filename: Joi.string().required(),
+             original_name: Joi.string().required(),
              name: Joi.string().required(),
          })),
 

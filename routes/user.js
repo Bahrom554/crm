@@ -5,7 +5,7 @@ const userValidator = require('../http/validation/user');
 
 
 
-router.post('/', validationMiddleware(userValidator.create), userController.create)
+router.post('/', validationMiddleware(userValidator.create), userController.create);
 router.get('/', validationMiddleware(userValidator.queryParams, 'query'),  userController.getAll)
 router.get('/roles', userController.getRoles)
 router.get('/:id',validationMiddleware(userValidator.userId, 'params'), userController.getOne)

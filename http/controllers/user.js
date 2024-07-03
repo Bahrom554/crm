@@ -2,7 +2,9 @@ const userService = require('../usecases/user');
 
 exports.create = async (req, res, next) => {
     try{
-       res.status(201).json(await userService.create(req.body));
+        let creator_id = req.user.id;
+        console.log("aasd", creator_id)
+       res.status(201).json(await userService.create(creator_id,req.body));
     }catch(err){
         err.statusCode =err.statusCode || 500;
         next(err);
@@ -14,7 +16,9 @@ exports.getAll = async (req, res, next) => {
         const page = req.query.page || 1;
         const limit = req.query.limit || 10;
         const search = req.query.search || null;
-        let result = await userService.getAll({page, limit, search});
+        const from = req.query.from || null;
+        const to = req.query.to || null;
+        let result = await userService.getAll({page, limit, search, from , to});
         res.json(result)
 
     } catch (err) {
