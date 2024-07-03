@@ -11,6 +11,10 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             unique: true
         },
+        comment: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         created_at: {
             type: DataTypes.DATE,
             allowNull: false,

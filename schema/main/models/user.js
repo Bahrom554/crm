@@ -6,22 +6,22 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
         },
         firstName: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(256),
             allowNull: false
         },
         lastName: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(256),
             allowNull: false
         },
-        patronymic: {
-            type: DataTypes.STRING,
+        midName: {
+            type: DataTypes.STRING(256),
             allowNull: false
         },
         role_id: {
             type: DataTypes.BIGINT,
-            allowNull: false,
+            allowNull: true,
             references: {
-                model: 'role',
+                model: { tableName: 'roles' },
                 key: 'id'
             }
         },
@@ -29,11 +29,13 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
-                model: 'user',
+                model: {
+                    tableName: 'users'
+                },
                 key: 'id'
             }
         },
-        phoneNumber: {
+        phone: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -45,6 +47,14 @@ module.exports = function (sequelize, DataTypes) {
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        salary: {
+            type: DataTypes.DECIMAL(18, 9),
+            allowNull: true
+        },
+        comment: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
 
         created_at: {

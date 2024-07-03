@@ -1,24 +1,18 @@
+
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('client', {
+    return sequelize.define('role', {
         id: {
+            autoIncrement: true,
             type: DataTypes.BIGINT,
-            allowNull: false,
             primaryKey: true,
-        },
-        phone: {
-            type: DataTypes.STRING(256),
-            allowNull: false,
         },
         name: {
             type: DataTypes.STRING(256),
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
-        username: {
-            type: DataTypes.STRING(256),
-            allowNull: true
-        },
-        device_name: {
-            type: DataTypes.STRING(256),
+        comment: {
+            type: DataTypes.STRING,
             allowNull: true
         },
         created_at: {
@@ -33,7 +27,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'clients',
+        tableName: 'roles',
         timestamps: false,
     });
 };

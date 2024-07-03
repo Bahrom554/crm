@@ -17,7 +17,9 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
-                model: 'user',
+                model:{
+                    tableName:'users'
+                },
                 key: 'id'
             }
         },
@@ -36,7 +38,7 @@ module.exports = function (sequelize, DataTypes) {
         tableName: 'user_files',
         timestamps: false,
         indexes:[{
-            fields:['user_id','fiilename'],
+            fields:['user_id','filename'],
             unique: true
         }]
     });
