@@ -9,7 +9,6 @@ const userRouter = require('./routes/user');
 const app = express();
 const Util = require('./util/utils');
 const IsAuth = require('./http/middlewares/isAuth');
-const IsHr = require('./http/middlewares/isHr');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ extended: false }));
@@ -17,7 +16,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users',IsAuth,IsHr, userRouter);
+app.use('/api/v1/users',IsAuth, userRouter);
 
 
 app.use((error, req, res, next) => {

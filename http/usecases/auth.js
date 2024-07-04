@@ -34,7 +34,7 @@ exports.login =  (data) => {
                 config.jwtSecretUser,
                 {expiresIn: '1d'}
             );
-            return {token: token, user: loadedUser};
+            return {token: token};
         })
     
 }

@@ -39,6 +39,17 @@ exports.getOne = async (req, res, next) => {
     }
 }
 
+exports.getProfile = async (req, res, next) => {
+    try {
+        const id = req.user.id;
+        res.json(await userService.getOne(id));
+
+    } catch (err) {
+        err.statusCode = err.statusCode || 500;
+        next(err);
+    }
+}
+
 exports.update = async (req, res, next) => {
     let id = req.params.id;
     try{
