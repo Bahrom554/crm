@@ -1,18 +1,30 @@
 [
     {
-        "id": "1",
+        "id": 1,
         "name": "hr"
     },
     {
-        "id": "2",
+        "id": 2,
         "name": "accountant"
     },
     {
-        "id": "3",
+        "id": 3,
         "name": "engineer"
     },
     {
-        "id": "4",
-        "name": "worker"
+        "id": 4,
+        "name": "mechanic"
+    },
+    {
+        "id": 5,
+        "name": "foreman"
+    },
+    {
+        "id": 6,
+        "name": "storekeeper"
+    },
+    {
+        "id": 7,
+        "name": "ceo"
     }
 ]

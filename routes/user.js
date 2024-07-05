@@ -6,12 +6,12 @@ const IsHr = require('../http/middlewares/isHr');
 
 
 
-router.post('/',IsHr, validationMiddleware(userValidator.create), userController.create);
-router.get('/',IsHr, validationMiddleware(userValidator.queryParams, 'query'),  userController.getAll)
-router.get('/roles',IsHr, userController.getRoles)
+router.post('/', validationMiddleware(userValidator.create), userController.create);
+router.get('/',validationMiddleware(userValidator.queryParams, 'query'),  userController.getAll)
+router.get('/roles', userController.getRoles)
 router.get('/profile', userController.getProfile)
-router.get('/:id',IsHr, validationMiddleware(userValidator.userId, 'params'), userController.getOne)
-router.put('/:id',IsHr, validationMiddleware(userValidator.update,), userController.update)
-router.delete('/:id',IsHr, userController.delete)
+router.get('/:id', validationMiddleware(userValidator.userId, 'params'), userController.getOne)
+router.put('/:id', validationMiddleware(userValidator.update,), userController.update)
+router.delete('/:id', userController.delete)
 
 module.exports = router;
