@@ -1,4 +1,4 @@
-const Constants = require('../../util/constants');
+const Constants = require('../../utils/constants');
 module.exports = async (req, res, next) => {
     try{
          if(req.user.role === Constants.roles.hr){

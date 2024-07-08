@@ -1,49 +1,18 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('user_file', {
         id: {
-            autoIncrement: true,
-            type: DataTypes.BIGINT,
+            type: DataTypes.INTEGER,
             primaryKey: true,
-        },
-        filename: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        original_name: {
-            type: DataTypes.STRING,
-            allowNull: false
+            autoIncrement: true,
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        user_id: {
-            type: DataTypes.BIGINT,
-            allowNull: true,
-            references: {
-                model:{
-                    tableName:'users'
-                },
-                key: 'id'
-            }
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
+        }
     }, {
         sequelize,
         tableName: 'user_files',
-        timestamps: false,
-        indexes:[{
-            fields:['user_id','filename'],
-            unique: true
-        }]
+        timestamps: false
     });
 };

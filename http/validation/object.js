@@ -1,11 +1,10 @@
 const Joi = require('joi');
-const user = {
+const object = {
    create: Joi.object().keys({
-      firstName: Joi.string().required(),
-      lastName: Joi.string().required(),
-      midName: Joi.string().required(),
-      phone: Joi.string().pattern(/^[0-9]+$/).required(),
-      username: Joi.string().required(),
+      name: Joi.string().required(),
+      totalValue: Joi.number().required(),
+      contractNumber: Joi.string().required(),
+      contractDate: Joi.date().required(),
       password: Joi.string().min(6).required(),
       salary: Joi.number().optional().allow(null),
       comment: Joi.string().optional().allow(null, ''),
@@ -45,9 +44,9 @@ const user = {
       search: Joi.string().optional().allow(null, ''),
    }),
 
-   userId: Joi.object().keys({
+   objectId: Joi.object().keys({
       id: Joi.number().required().min(1),
    }),
 }
 
-module.exports = user;
+module.exports = object;

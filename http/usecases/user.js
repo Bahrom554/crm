@@ -1,55 +1,92 @@
 const bcrypt = require("bcrypt");
 const Models = require("../../schema/main/models");
-const Utils = require('../../util/utils');
-const { Op } = require('sequelize');
+const Utils = require('../../utils/utils');
+const Database = require('../../db');
+const {
+    Op
+} = require('sequelize');
 const moment = require('moment')
 
 exports.create = async (creator_id, data) => {
+    const t = await Database.main.transaction();
+    try {
+        const {
+            password,
+            username,
+            files,
+            ...body
+        } = data;
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { password, username, ...body } = data;
-    const hashedPassword = await bcrypt.hash(password, 10);
+        const [user, created] = await Models.user.findOrCreate({
+            where: {
+                username: username
+            },
+            defaults: {
+                ...body,
+                password: hashedPassword,
+                creator_id: creator_id
+            },
+            transaction: t
+        });
 
-    const [user, created] = await Models.user.findOrCreate({
-        where: { username: username },
-        defaults: {
-            ...body,
-            password: hashedPassword,
-            creator_id: creator_id
-        },
-    });
+        if (!created) {
+            let err = new Error('This username has been used!');
+            err.statusCode = 422;
+            throw err;
+        }
+        if (data.files && data.files.length > 0) {
+            for (let i = 0; i < data.files.length; i++) {
+                let _file = data.files[i];
+                let file = await Models.file.findByPk(_file.id);
+                if (file) {
+                    await user.addFile(file, {
+                        through: {
+                            name: _file.name
+                        },
+                        transaction: t
+                    });
+                }
+            }
+        }
+        await t.commit();
+        return await getUser(user.id);
 
-    if (!created) {
-        let err = new Error('This username has been used!');
-        err.statusCode = 422;
-        throw err;
+    } catch (error) {
+        await t.rollback();
+        throw error;
     }
-    let files = [];
-    if (data.files && data.files.length > 0) {
-        files.push(...data.files.map(el => {
-            el.user_id = user.id;
-            return el;
-        }))
-    }
-    await Models.user_file.bulkCreate(files, { ignoreDuplicates: true });
-
-    
-    return await getUser(user.id);
-
-
-
 }
 
 exports.getAll = async (options) => {
     let query = {};
     let subQuery = [];
-    let include = [{ model: Models.role, as: "role" }];
+    let include = [{
+        model: Models.role,
+        as: "role"
+    }];
     if (options.search) {
         subQuery.push({
-            [Op.or]: [
-                { username: { [Op.like]: '%' + options.search + '%' } },
-                { firstName: { [Op.like]: '%' + options.search + '%' } },
-                { midName: { [Op.like]: '%' + options.search + '%' } },
-                { lastName: { [Op.like]: '%' + options.search + '%' } },
+            [Op.or]: [{
+                    username: {
+                        [Op.like]: '%' + options.search + '%'
+                    }
+                },
+                {
+                    firstName: {
+                        [Op.like]: '%' + options.search + '%'
+                    }
+                },
+                {
+                    midName: {
+                        [Op.like]: '%' + options.search + '%'
+                    }
+                },
+                {
+                    lastName: {
+                        [Op.like]: '%' + options.search + '%'
+                    }
+                },
             ]
         });
     }
@@ -61,15 +98,13 @@ exports.getAll = async (options) => {
                 [Op.lte]: moment(options.to, "DD-MM-YYYY").toDate()
             }
         })
-    }
-    else if (options.from) {
+    } else if (options.from) {
         subQuery.push({
             updated_at: {
                 [Op.gte]: moment(options.from, "DD-MM-YYYY").toDate()
             }
         });
-    }
-    else if (options.to) {
+    } else if (options.to) {
         subQuery.push({
             updated_at: {
                 [Op.lte]: moment(options.to, "DD-MM-YYYY").toDate()
@@ -81,19 +116,26 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    attributes ={exclude: ['password']};
+    attributes = {
+        exclude: ['password']
+    };
     return Utils.getPagination(Models.user, query, options, [], include, attributes);
 }
 
 exports.getOne = async (id) => {
-    
+
     return await getUser(id);
 }
 
 exports.update = async (id, data) => {
 
     let user = await Models.user.findOne({
-        where: { username: data.username, id: { [Op.ne]: id } },
+        where: {
+            username: data.username,
+            id: {
+                [Op.ne]: id
+            }
+        },
     });
     if (user) {
         let err = new Error('username hase used');
@@ -103,27 +145,56 @@ exports.update = async (id, data) => {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
     }
-    const [updated, _user] = await Models.user.update(data, { where: { id: id }, returning: true });
+    const [updated, _user] = await Models.user.update(data, {
+        where: {
+            id: id
+        },
+        returning: true
+    });
 
     if (!updated) {
         let err = new Error('account not found');
         err.statusCode = 404;
         throw err;
     }
-    let files = [];
     if (data.files && data.files.length > 0) {
-        files.push(...data.files.map(el => {
-            el.user_id = id;
-            return el;
-        }))
+        for (let i = 0; i < data.files.length; i++) {
+            let file = data.files[i];
+            let _file = await Models.file.findOne({
+                where: {
+                    id: file.id
+                }
+            });
+            if (!_file) continue;
+            let userFile = await Models.user_file.findOne({
+                where: {
+                    userId: id,
+                    name: file.name
+                }
+            });
+            if (userFile) {
+                await userFile.update({
+                    fileId: file.id
+                });
+            } else {
+                await Models.user_file.create({
+                    userId: id,
+                    fileId: file.id,
+                    name: file.name
+                });
+            }
+        }
     }
-    await Models.user_file.bulkCreate(files, { ignoreDuplicates: true });
 
     return await getUser(id);
 }
 
 exports.delete = async function (id) {
-    let account = await Models.user.destroy({ where: { id: id } });
+    let account = await Models.user.destroy({
+        where: {
+            id: id
+        }
+    });
 
     if (!account) {
         let err = new Error('Account not found');
@@ -131,21 +202,29 @@ exports.delete = async function (id) {
         throw err;
     }
 
-    return { message: 'Account was deleted successfully.' };
+    return {
+        message: 'Account was deleted successfully.'
+    };
 };
 
 exports.getRoles = async function () {
     return await Models.role.findAll({});
 }
 
-async function getUser(id){
+async function getUser(id) {
     let user = await Models.user.findOne({
-        where: { id: id },
-        attributes: {exclude: ['password']},
+        where: {
+            id: id
+        },
+        attributes: {
+            exclude: ['password']
+        },
         include: [{
-            model: Models.user_file, as: "files"
+            model: Models.file,
+            as: "files"
         }, {
-            model: Models.role, as: 'role'
+            model: Models.role,
+            as: 'role'
         }]
     });
     if (!user) {

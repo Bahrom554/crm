@@ -5,6 +5,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+        },
         totalValue: {
             type: DataTypes.DECIMAL(16, 2),
             allowNull: false
@@ -19,13 +24,19 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true,
             defaultValue: DataTypes.NOW,
         },
-        contractFile: {
-            type: DataTypes.JSONB,
-            allowNull: true
-        },
         location: {
             type: DataTypes.JSONB,
             allowNull: true
+        },
+        creator_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: {
+                    tableName: 'users'
+                },
+                key: 'id'
+            }
         },
         created_at: {
             type: DataTypes.DATE,
