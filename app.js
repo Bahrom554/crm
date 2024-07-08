@@ -8,12 +8,18 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const fileRouter = require('./routes/file');
 const objectRouter = require('./routes/object');
+const materialRouter = require('./routes/material');
+const workRouter = require('./routes/worker');
+const profileRouter = require('./routes/profile');
 const CONST = require("./utils/constants");
 const dir = CONST.defaults.UPLOAD_DIR;
 const fs = require('fs');
 const app = express();
 const Util = require('./utils/utils');
 const IsAuth = require('./http/middlewares/isAuth');
+const IsHr = require('./http/middlewares/isHr');
+const IsPto = require('./http/middlewares/isPto.js');
+
 
 app.use(logger('dev'));
 app.use(express.json({
@@ -27,8 +33,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use('/api/v1/files', fileRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', IsAuth, userRouter);
-app.use('/api/v1/objects', objectRouter);
+app.use('/api/v1/users', IsAuth, IsHr, userRouter);
+app.use('/api/v1/objects',IsAuth, IsPto, objectRouter);
+app.use('/api/v1/materials',IsAuth, IsPto, materialRouter);
+app.use('/api/v1/works',IsAuth, IsPto, workRouter);
+app.use('/api/v1/profile',IsAuth, profileRouter);
 
 
 

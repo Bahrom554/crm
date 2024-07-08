@@ -7,7 +7,7 @@ exports.login =  (data) => {
 
     const {username, password} = data;
     let loadedUser;
-     return Models.user.findOne({where:{username: username}, include:[{model:Models.role, as: 'role'}]})
+     return Models.user.unscoped().findOne({where:{username: username}, include:[{model:Models.role, as: 'role'}]})
         .then(user => {
             if (!user) {
                 console.log(username)

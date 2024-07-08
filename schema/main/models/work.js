@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('object', {
+    return sequelize.define('work', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
@@ -8,29 +8,22 @@ module.exports = function (sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
-        totalValue: {
+        unity: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        amount: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        contractNumber: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+        cost: {
+            type: DataTypes.DECIMAL,
+            allowNull: false
         },
-        contractDate: {
-            type: DataTypes.DATE,
-            allowNull: true,
-            defaultValue: DataTypes.NOW,
-        },
-        latitude: {
-            type: DataTypes.FLOAT,
-            allowNull: true
-        },
-        longitude: {
-            type: DataTypes.FLOAT,
-            allowNull: true
+        totalCost: {
+            type: DataTypes.DECIMAL,
+            allowNull: false
         },
         creator_id: {
             type: DataTypes.BIGINT,
@@ -42,16 +35,15 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        file_id: {
+        object_id: {
             type: DataTypes.BIGINT,
-            allowNull: true,
+            allowNull: false,
             references: {
                 model: {
-                    tableName: 'files'
+                    tableName: 'objects'
                 },
                 key: 'id'
             }
-
         },
         created_at: {
             type: DataTypes.DATE,
@@ -65,9 +57,14 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'objects',
+        tableName: 'works',
         schema: 'public',
         timestamps: false,
+        indexes: [{
+            unique: true,
+            fields: ['name', 'object_id']
+        }]
+        
 
     })
 }

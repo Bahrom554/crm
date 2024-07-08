@@ -3,22 +3,47 @@ const _user = require('./user');
 const _role = require('./role');
 const _file = require('./file')
 const _user_file = require('./user_file');
+const _object = require('./object');
+const _material = require('./material');
+const _work = require('./work');
 function initModels(sequelize) {
     const role = _role(sequelize, DataTypes);
     const user = _user(sequelize, DataTypes);
-    const file  = _file(sequelize, DataTypes);
+    const file = _file(sequelize, DataTypes);
     const user_file = _user_file(sequelize, DataTypes);
+    const object = _object(sequelize, DataTypes);
+    const material = _material(sequelize, DataTypes);
+    const work = _work(sequelize, DataTypes);
 
     user.belongsTo(role, { foreignKey: 'role_id', onDelete: 'SET NULL' });
-    role.hasMany(user, {as: 'users', foreignKey: 'role_id'});
-    user.belongsToMany(file, {as:'files', through:'user_file', onDelete: 'cascade'});
-    file.belongsToMany(user,{as:'users', through: 'user_file'});
+    role.hasMany(user, { as: 'users', foreignKey: 'role_id' });
+    user.belongsToMany(file, { as: 'files', through: 'user_file', onDelete: 'cascade' });
+    user.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    file.belongsToMany(user, { as: 'users', through: 'user_file' });
+    object.belongsTo(file, { as: 'file', foreignKey: 'file_id' });
+    object.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    user.hasMany(object, { as: 'objects', foreignKey: 'creator_id' });
+    
+    material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    user.hasMany(material, { as: 'materials', foreignKey: 'creator_id' });
+    object.hasMany(material, { as: 'materials', foreignKey: 'object_id' });
+    material.belongsTo(object, { foreignKey: 'object_id' });
+
+    work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    user.hasMany(work, { as: 'works', foreignKey: 'creator_id' });
+    object.hasMany(work, { as: 'works', foreignKey: 'object_id' });
+    work.belongsTo(object, { foreignKey: 'object_id' });
+
 
     return {
         user,
         role,
         file,
-        user_file
+        user_file,
+        object,
+        material,
+        work
+
     }
 
 }

@@ -116,10 +116,8 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    attributes = {
-        exclude: ['password']
-    };
-    return Utils.getPagination(Models.user, query, options, [], include, attributes);
+    
+    return Utils.getPagination(Models.user, query, options, [], include);
 }
 
 exports.getOne = async (id) => {
@@ -129,7 +127,7 @@ exports.getOne = async (id) => {
 
 exports.update = async (id, data) => {
 
-    let user = await Models.user.findOne({
+    let user = await Models.user.unscoped().findOne({
         where: {
             username: data.username,
             id: {
@@ -215,9 +213,6 @@ async function getUser(id) {
     let user = await Models.user.findOne({
         where: {
             id: id
-        },
-        attributes: {
-            exclude: ['password']
         },
         include: [{
             model: Models.file,

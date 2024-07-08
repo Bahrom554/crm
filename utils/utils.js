@@ -20,9 +20,8 @@ const makePagination = function (data, options, totalDocs) {
     };
 };
 
-const getPagination = async function (Model, query, options, order = [], include = [], attributes) {
+const getPagination = async function (Model, query, options, order = [], include = []) {
     let result = await Model.findAndCountAll({
-        attributes: attributes,
         where: query,
         include: include,
         order: order,
@@ -49,10 +48,6 @@ exports.seedUser = async function () {
          phone: "998006767",
          salary: 123123.123123,
          role_id: 1,
-         files: [{
-                filename: "testfilename.doc",
-                name: "test file name",
-            }],
         }],{
         ignoreDuplicates: true,
       });

@@ -49,7 +49,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
         },
         salary: {
-            type: DataTypes.DECIMAL(18, 9),
+            type: DataTypes.DECIMAL,
             allowNull: true
         },
         comment: {
@@ -72,6 +72,9 @@ module.exports = function (sequelize, DataTypes) {
         tableName: 'users',
         schema: 'public',
         timestamps: false,
+        defaultScope: {
+            attributes: { exclude: ['password'] } // exclude 'password' by default
+          }
 
     });
 };

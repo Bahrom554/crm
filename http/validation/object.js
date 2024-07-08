@@ -5,34 +5,19 @@ const object = {
       totalValue: Joi.number().required(),
       contractNumber: Joi.string().required(),
       contractDate: Joi.date().required(),
-      password: Joi.string().min(6).required(),
-      salary: Joi.number().optional().allow(null),
-      comment: Joi.string().optional().allow(null, ''),
-      role_id: Joi.number().optional().allow(null),
-      files: Joi.array().optional().items(Joi
-         .object().keys({
-             id: Joi.number().required(),
-             name: Joi.string().required(),
-         })),
-
-
+      latitude: Joi.number().optional().allow(null),
+      longitude: Joi.number().optional().allow(null),
+      file_id: Joi.number().optional().allow(null)
    }),
 
    update: Joi.object().keys({
-      firstName: Joi.string(),
-      lastName: Joi.string(),
-      midName: Joi.string(),
-      phone: Joi.string().pattern(/^[0-9]+$/),
-      username: Joi.string(),
-      salary: Joi.number().optional().allow(null),
-      comment: Joi.string().optional().allow(null, ''),
-      role_id: Joi.number().optional().allow(null),
-      password: Joi.string().min(8),
-      files: Joi.array().optional().items(Joi
-         .object().keys({
-            id: Joi.number().required(),
-            name: Joi.string().required(),
-         })),
+      name: Joi.string(),
+      totalValue: Joi.number(),
+      contractNumber: Joi.string(),
+      contractDate: Joi.date(),
+      latitude: Joi.number().optional().allow(null),
+      longitude: Joi.number().optional().allow(null),
+      file_id: Joi.number().optional().allow(null)
 
    }),
 
