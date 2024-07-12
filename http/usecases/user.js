@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Models = require("../../schema/main/models");
 const Utils = require('../../utils/utils');
 const Database = require('../../db');
+const sequelize = require('sequelize');
 const {
     Op
 } = require('sequelize');
@@ -61,32 +62,37 @@ exports.create = async (creator_id, data) => {
 exports.getAll = async (options) => {
     let query = {};
     let subQuery = [];
-    let include = [{
-        model: Models.role,
-        as: "role"
-    }];
+    let include;
+     include = [{
+            model: Models.role,
+            as: "role",
+        }];
+    
+     if(options.role_id){
+        subQuery.push({role_id: options.role_id})
+     }
     if (options.search) {
         subQuery.push({
             [Op.or]: [{
-                    username: {
-                        [Op.like]: '%' + options.search + '%'
-                    }
-                },
-                {
-                    firstName: {
-                        [Op.like]: '%' + options.search + '%'
-                    }
-                },
-                {
-                    midName: {
-                        [Op.like]: '%' + options.search + '%'
-                    }
-                },
-                {
-                    lastName: {
-                        [Op.like]: '%' + options.search + '%'
-                    }
-                },
+                username: {
+                    [Op.like]: '%' + options.search + '%'
+                }
+            },
+            {
+                firstName: {
+                    [Op.like]: '%' + options.search + '%'
+                }
+            },
+            {
+                midName: {
+                    [Op.like]: '%' + options.search + '%'
+                }
+            },
+            {
+                lastName: {
+                    [Op.like]: '%' + options.search + '%'
+                }
+            },
             ]
         });
     }
@@ -116,7 +122,7 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    
+
     return Utils.getPagination(Models.user, query, options, [], include);
 }
 
@@ -228,4 +234,30 @@ async function getUser(id) {
         throw err;
     }
     return user;
+}
+
+exports.statistics = async function () {
+    let data = await Models.user.findAll({
+        attributes: [
+            [sequelize.fn('COUNT', sequelize.col('*')), 'userCount'],
+            'user.role_id', 
+        ],
+        include: {
+            model: Models.role,
+            as: "role",
+            attributes: ['id','name'],
+        },
+        group: ['user.role_id','role.id'], 
+    });
+
+    let result = data.map(it => {
+        return {
+            user_count: it.get('userCount'),
+            role_id: it.role.id,
+            role_name: it.role.name
+        }
+
+    });
+
+    return result;
 }

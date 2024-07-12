@@ -1,12 +1,12 @@
 const userService = require('../usecases/user');
 
 exports.create = async (req, res, next) => {
-    try{
+    try {
         let creator_id = req.user.id;
         console.log("aasd", creator_id)
-       res.status(201).json(await userService.create(creator_id,req.body));
-    }catch(err){
-        err.statusCode =err.statusCode || 500;
+        res.status(201).json(await userService.create(creator_id, req.body));
+    } catch (err) {
+        err.statusCode = err.statusCode || 500;
         next(err);
     }
 }
@@ -18,7 +18,8 @@ exports.getAll = async (req, res, next) => {
         const search = req.query.search || null;
         const from = req.query.from || null;
         const to = req.query.to || null;
-        let result = await userService.getAll({page, limit, search, from , to});
+        const role_id = req.query.role_id || null;
+        let result = await userService.getAll({ page, limit, search, role_id, from, to });
         res.json(result)
 
     } catch (err) {
@@ -52,12 +53,12 @@ exports.getProfile = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     let id = req.params.id;
-    try{
+    try {
         res.status(201).json(await userService.update(id, req.body));
-     }catch(err){
-         err.statusCode =err.statusCode || 500;
-         next(err);
-     }
+    } catch (err) {
+        err.statusCode = err.statusCode || 500;
+        next(err);
+    }
 }
 
 exports.delete = async (req, res, next) => {
@@ -77,6 +78,15 @@ exports.getRoles = async (req, res, next) => {
         let result = await userService.getRoles();
         res.json(result)
 
+    } catch (err) {
+        err.statusCode = err.statusCode || 500;
+        next(err);
+    }
+}
+
+exports.statistics = async (req, res, next) => {
+    try {
+        res.json(await userService.statistics())
     } catch (err) {
         err.statusCode = err.statusCode || 500;
         next(err);

@@ -43,6 +43,7 @@ const user = {
       page: Joi.number().optional().min(1),
       limit: Joi.number().optional().min(1),
       search: Joi.string().optional().allow(null, ''),
+      role_id: Joi.number().optional().min(1),
    }),
 
    userId: Joi.object().keys({
