@@ -1,6 +1,6 @@
 exports.roles = {
 hr:'hr',
-pto: 'pto',
+pto: 'engineer',
 accountant: 'accountant',
 engineer: ' engineer'
 }
