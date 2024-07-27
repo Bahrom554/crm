@@ -36,6 +36,18 @@ exports.create = async (creator_id, data) => {
             err.statusCode = 422;
             throw err;
         }
+        if(data.object_id){
+            let object = await Models.object.findByPk(object_id);
+            if (!object) {
+                let err = new Error('Object Not found!');
+                err.statusCode = 422;
+                throw err;
+            }
+            await user.addObject(object, { through: { role_id: body.role_id }, transaction: t });
+
+
+        }
+        
         if (data.files && data.files.length > 0) {
             for (let i = 0; i < data.files.length; i++) {
                 let _file = data.files[i];
@@ -63,14 +75,14 @@ exports.getAll = async (options) => {
     let query = {};
     let subQuery = [];
     let include;
-     include = [{
-            model: Models.role,
-            as: "role",
-        }];
-    
-     if(options.role_id){
-        subQuery.push({role_id: options.role_id})
-     }
+    include = [{
+        model: Models.role,
+        as: "role",
+    }];
+
+    if (options.role_id) {
+        subQuery.push({ role_id: options.role_id })
+    }
     if (options.search) {
         subQuery.push({
             [Op.or]: [{
@@ -240,14 +252,14 @@ exports.statistics = async function () {
     let data = await Models.user.findAll({
         attributes: [
             [sequelize.fn('COUNT', sequelize.col('*')), 'userCount'],
-            'user.role_id', 
+            'user.role_id',
         ],
         include: {
             model: Models.role,
             as: "role",
-            attributes: ['id','name'],
+            attributes: ['id', 'name'],
         },
-        group: ['user.role_id','role.id'], 
+        group: ['user.role_id', 'role.id'],
     });
 
     let result = data.map(it => {

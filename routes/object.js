@@ -1,13 +1,14 @@
 const express = require('express');
-const router =express.Router();
+const router = express.Router();
 const objectController = require('../http/controllers/object');
 const validationMiddleware = require('../http/middlewares/validator');
 const objectValidator = require('../http/validation/object');
-
-router.post('/', validationMiddleware(objectValidator.create), objectController.create);
-router.get('/',validationMiddleware(objectValidator.queryParams, 'query'),  objectController.getAll)
-router.get('/:id', validationMiddleware(objectValidator.objectId, 'params'), objectController.getOne)
-router.put('/:id', validationMiddleware(objectValidator.update,), objectController.update)
-router.delete('/:id', objectController.delete)
+const IsPto = require('../http/middlewares/isPto.js');
+ 
+router.post('/', IsPto, validationMiddleware(objectValidator.create), objectController.create);
+router.get('/', validationMiddleware(objectValidator.queryParams, 'query'), objectController.getAll)
+router.get('/:id', IsPto, validationMiddleware(objectValidator.objectId, 'params'), objectController.getOne)
+router.put('/:id', IsPto, validationMiddleware(objectValidator.update,), objectController.update)
+router.delete('/:id', IsPto, objectController.delete)
 
 module.exports = router;

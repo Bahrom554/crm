@@ -10,6 +10,7 @@ const user = {
       salary: Joi.number().optional().allow(null),
       comment: Joi.string().optional().allow(null, ''),
       role_id: Joi.number().optional().allow(null),
+      object_id: Joi.number().optional().allow(null),
       files: Joi.array().optional().items(Joi
          .object().keys({
              id: Joi.number().required(),

@@ -18,7 +18,6 @@ const app = express();
 const Util = require('./utils/utils');
 const IsAuth = require('./http/middlewares/isAuth');
 const IsHr = require('./http/middlewares/isHr');
-const IsPto = require('./http/middlewares/isPto.js');
 
 
 app.use(logger('dev'));
@@ -34,9 +33,9 @@ app.use(cors());
 app.use('/api/v1/files', fileRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', IsAuth, IsHr, userRouter);
-app.use('/api/v1/objects',IsAuth, IsPto, objectRouter);
-app.use('/api/v1/materials',IsAuth, IsPto, materialRouter);
-app.use('/api/v1/works',IsAuth, IsPto, workRouter);
+app.use('/api/v1/objects',IsAuth, objectRouter);
+app.use('/api/v1/materials',IsAuth, materialRouter);
+app.use('/api/v1/works',IsAuth, workRouter);
 app.use('/api/v1/profile',IsAuth, profileRouter);
 
 

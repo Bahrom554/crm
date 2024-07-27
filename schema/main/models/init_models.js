@@ -6,6 +6,7 @@ const _user_file = require('./user_file');
 const _object = require('./object');
 const _material = require('./material');
 const _work = require('./work');
+const _staff = require('./staff');
 function initModels(sequelize) {
     const role = _role(sequelize, DataTypes);
     const user = _user(sequelize, DataTypes);
@@ -14,6 +15,7 @@ function initModels(sequelize) {
     const object = _object(sequelize, DataTypes);
     const material = _material(sequelize, DataTypes);
     const work = _work(sequelize, DataTypes);
+    const staff = _staff(sequelize, DataTypes);
 
     user.belongsTo(role, { foreignKey: 'role_id', onDelete: 'SET NULL' });
     role.hasMany(user, { as: 'users', foreignKey: 'role_id' });
@@ -33,6 +35,9 @@ function initModels(sequelize) {
     user.hasMany(work, { as: 'works', foreignKey: 'creator_id' });
     object.hasMany(work, { as: 'works', foreignKey: 'object_id' });
     work.belongsTo(object, { foreignKey: 'object_id' });
+
+    object.belongsToMany(user, {as:'staff',through: 'staff', foreignKey:'object_id', otherKey:'user_id'});
+    user.belongsToMany(object, {as:'objects', through: 'staff', foreignKey: 'user_id', otherKey: 'object_id'});
 
 
     return {
