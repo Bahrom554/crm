@@ -37,7 +37,7 @@ exports.create = async (creator_id, data) => {
             throw err;
         }
         if(data.object_id){
-            let object = await Models.object.findByPk(object_id);
+            let object = await Models.object.findByPk(data.object_id);
             if (!object) {
                 let err = new Error('Object Not found!');
                 err.statusCode = 422;

@@ -7,7 +7,13 @@ const object = {
       contractDate: Joi.date().required(),
       latitude: Joi.number().optional().allow(null),
       longitude: Joi.number().optional().allow(null),
-      file_id: Joi.number().optional().allow(null)
+      file_id: Joi.number().optional().allow(null),
+      // users: Joi.array().optional().allow(null,Joi.array().length(0)).items(Joi.number())
+
+   }),
+
+   userAssign: Joi.object().keys({
+      users: Joi.array().optional().allow(null,Joi.array().length(0)).items(Joi.number())
    }),
 
    update: Joi.object().keys({

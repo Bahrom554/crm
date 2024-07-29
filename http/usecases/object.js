@@ -22,9 +22,22 @@ exports.create = async (data) => {
             }
         }
         
-        return await Models.object.create(data);
+       return  await Models.object.create(data);
+//            let users = data.users;
+//            let members =[];
+//         if(users && users.length > 0){
+//             for(let i=0; i< data.users.length; i++){
+//                 let user_id = users[i];
+//                 let user = await Models.user.findByPk(user_id);
+//                 if(user){
+//                  members.push(user);
+//                 }
+//             }
 
-   
+//             await _object.addMembers(members);
+//         }
+
+//    return await Models.object.findOne({where:{id: _object.id}});
 }
 
 exports.getAll = async (options) => {

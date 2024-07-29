@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('staff', {
+    return sequelize.define('member', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
@@ -48,11 +48,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'staff',
+        tableName: 'members',
         schema: 'public',
         timestamps: false,
         indexes: [{
-            fiels: ['object_id', 'user_id'],
+            fields: ['object_id', 'user_id'],
             unique: true
         }]
 
