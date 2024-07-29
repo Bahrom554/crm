@@ -10,10 +10,10 @@ exports.create = async (req, res, next) => {
     }
 }
 
-exports.    userAssign = async (req, res, next) => {
+exports.userAssign = async (req, res, next) => {
     try{
-        let creator_id = req.user.id;
-       res.status(201).json(await objectService.create(req.body));
+         let object_id = req.params.id;
+       res.status(201).json(await objectService.userAssign(object_id, req.body));
     }catch(err){
         err.statusCode =err.statusCode || 500;
         next(err);

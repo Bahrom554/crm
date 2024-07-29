@@ -1,44 +1,64 @@
 const Models = require("../../schema/main/models");
 const Utils = require('../../utils/utils');
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 const moment = require('moment')
 
 exports.create = async (data) => {
 
-  
-        
-        let object = await Models.object.findOne({ where: { name: data.name } });
+
+
+    let object = await Models.object.findOne({ where: { name: data.name } });
+    if (object) {
+        let err = new Error('Object with this name has been created!');
+        err.statusCode = 422;
+        throw err;
+    }
+    else {
+        object = await Models.object.findOne({ where: { contractNumber: data.contractNumber } });
         if (object) {
-            let err = new Error('Object with this name has been created!');
+            let err = new Error('Object with this contractNumber has been created!');
             err.statusCode = 422;
             throw err;
         }
-        else {
-            object = await Models.object.findOne({ where: { contractNumber: data.contractNumber } });
-            if (object) {
-                let err = new Error('Object with this contractNumber has been created!');
-                err.statusCode = 422;
-                throw err;
+    }
+
+    return await Models.object.create(data);
+    //            let users = data.users;
+    //            let members =[];
+    //         if(users && users.length > 0){
+    //             for(let i=0; i< data.users.length; i++){
+    //                 let user_id = users[i];
+    //                 let user = await Models.user.findByPk(user_id);
+    //                 if(user){
+    //                  members.push(user);
+    //                 }
+    //             }
+
+    //             await _object.addMembers(members);
+    //         }
+
+    //    return await Models.object.findOne({where:{id: _object.id}});
+}
+
+exports.userAssign = async (id, data) => {
+    let users = data.users;
+    let members = [];
+    if (users && users.length > 0) {
+        for (let i = 0; i < data.users.length; i++) {
+            let user_id = users[i];
+            let user = await Models.user.findByPk(user_id);
+            if (user) {
+                members.push(user);
             }
         }
-        
-       return  await Models.object.create(data);
-//            let users = data.users;
-//            let members =[];
-//         if(users && users.length > 0){
-//             for(let i=0; i< data.users.length; i++){
-//                 let user_id = users[i];
-//                 let user = await Models.user.findByPk(user_id);
-//                 if(user){
-//                  members.push(user);
-//                 }
-//             }
+        let object = await getObject(id);
+        await object.addMembers(members);
+    }
 
-//             await _object.addMembers(members);
-//         }
-
-//    return await Models.object.findOne({where:{id: _object.id}});
+    return await Models.object.findOne({ where: { id: _object.id } });
 }
+
+
 
 exports.getAll = async (options) => {
     let query = {};
@@ -125,10 +145,10 @@ exports.update = async (id, data) => {
             throw err;
         }
     }
-   
-    await Models.object.update(data,{where:{id:id}});
-    
-    
+
+    await Models.object.update(data, { where: { id: id } });
+
+
 
     return await getObject(id);
 }
@@ -163,7 +183,7 @@ async function getObject(id) {
         }, {
             model: Models.user,
             as: 'creator',
-            
+
         }]
     });
     if (!object) {
