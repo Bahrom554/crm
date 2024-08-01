@@ -39,7 +39,7 @@ exports.getPagination = getPagination;
 exports.seedUser = async function () {
     await createRoles();
     const passwordHash = await bcrypt.hash(config.userPassword, 10);
-    let role = await Models.role.findOrCreate({ where: { code: CONST.role_codes.superadmin }, defaults: { name: "superAdmin" } });
+    let role = await Models.role.findOne({ where: { code: CONST.role_codes.superadmin}});
 
     await Models.user.findOrCreate({
         where: { username: config.userName }, defaults: {

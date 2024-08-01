@@ -26,11 +26,11 @@ exports.login = (data) => {
                 error.statusCode = 401;
                 throw error;
             }
-            if (loadedUser.role) {
-                if (role.permissions) {
-                    redisClient.sadd([`${loadedUser.id}:permissions`, ...loadedUser.role.permissions])
-                }
+
+            if (loadedUser?.role?.permissions) {
+                redisClient.sadd([`${loadedUser.id}:permissions`, ...loadedUser.role.permissions])
             }
+
 
             const token = jwt.sign(
                 {

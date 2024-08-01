@@ -3,7 +3,7 @@ const userController = require('../http/controllers/user');
 const validationMiddleware = require('../http/middlewares/validator');
 const userValidator = require('../http/validation/user');
 const permissionMiddleware =require('../http/middlewares/check-permission');
-
+const checkSuperAdminDataMiddleware = require('../http/middlewares/checkSuperadminData.js');
 
 router.get('/stats',permissionMiddleware("user:statistics"),userController.statistics);
 router.post('/', permissionMiddleware("user:create"), validationMiddleware(userValidator.create), userController.create);

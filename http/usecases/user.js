@@ -3,10 +3,13 @@ const Models = require("../../schema/main/models");
 const Utils = require('../../utils/utils');
 const Database = require('../../db');
 const sequelize = require('sequelize');
+const appConfig = require('../../config/app')();
+const CONSTANTS = require('../../utils/constants');
 const {
     Op
 } = require('sequelize');
-const moment = require('moment')
+const moment = require('moment');
+
 
 exports.create = async (creator_id, data) => {
     const t = await Database.main.transaction();
@@ -15,16 +18,18 @@ exports.create = async (creator_id, data) => {
             password,
             username,
             files,
+            role_id,
             ...body
         } = data;
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        let role = await Models.role.findOne({ where: { id: role_id, code: { [Op.ne]: CONSTANTS.role_codes.superadmin } } });
         const [user, created] = await Models.user.findOrCreate({
             where: {
                 username: username
             },
             defaults: {
                 ...body,
+                role_id: role?.id || null,
                 password: hashedPassword,
                 creator_id: creator_id
             },
@@ -36,7 +41,7 @@ exports.create = async (creator_id, data) => {
             err.statusCode = 422;
             throw err;
         }
-        if(data.object_id){
+        if (data.object_id) {
             let object = await Models.object.findByPk(data.object_id);
             if (!object) {
                 let err = new Error('Object Not found!');
@@ -47,7 +52,7 @@ exports.create = async (creator_id, data) => {
 
 
         }
-        
+
         if (data.files && data.files.length > 0) {
             for (let i = 0; i < data.files.length; i++) {
                 let _file = data.files[i];
@@ -79,7 +84,6 @@ exports.getAll = async (options) => {
         model: Models.role,
         as: "role",
     }];
-
     if (options.role_id) {
         subQuery.push({ role_id: options.role_id })
     }
@@ -144,7 +148,6 @@ exports.getOne = async (id) => {
 }
 
 exports.update = async (id, data) => {
-
     let user = await Models.user.unscoped().findOne({
         where: {
             username: data.username,
@@ -161,6 +164,10 @@ exports.update = async (id, data) => {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
     }
+
+    let role = await Models.role.findOne({ where: { id: data?.role_id || null, code: { [Op.ne]: CONSTANTS.role_codes.superadmin } } });
+    if (!role) delete data.role_id;
+
     const [updated, _user] = await Models.user.update(data, {
         where: {
             id: id
@@ -260,7 +267,7 @@ exports.statistics = async function () {
         group: ['user.role_id', 'role.id'],
     });
 
-    let result = data.map(it => {
+    let result = data.filter(it => { if (it.role.code == CONSTANTS.role_codes.superadmin) { return false } return true; }).map(it => {
         return {
             user_count: it.get('userCount'),
             role_id: it.role.id,
