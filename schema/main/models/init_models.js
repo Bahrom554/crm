@@ -25,7 +25,7 @@ function initModels(sequelize) {
     object.belongsTo(file, { as: 'file', foreignKey: 'file_id' });
 
     object.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
-    // user.hasMany(object, { as: 'objects', foreignKey: 'creator_id' });
+    user.hasMany(object, { as: 'createdObjects', foreignKey: 'creator_id' });
     
     material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
     user.hasMany(material, { as: 'materials', foreignKey: 'creator_id' });

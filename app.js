@@ -11,13 +11,13 @@ const objectRouter = require('./routes/object');
 const materialRouter = require('./routes/material');
 const workRouter = require('./routes/worker');
 const profileRouter = require('./routes/profile');
+const roleRouter = require('./routes/roles');
 const CONST = require("./utils/constants");
 const dir = CONST.defaults.UPLOAD_DIR;
 const fs = require('fs');
 const app = express();
 const Util = require('./utils/utils');
 const IsAuth = require('./http/middlewares/isAuth');
-const IsHr = require('./http/middlewares/isHr');
 
 
 app.use(logger('dev'));
@@ -30,13 +30,14 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
-app.use('/api/v1/files', fileRouter);
+app.use('/api/v1/files',IsAuth, fileRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', IsAuth, IsHr, userRouter);
+app.use('/api/v1/users', IsAuth, userRouter);
 app.use('/api/v1/objects',IsAuth, objectRouter);
 app.use('/api/v1/materials',IsAuth, materialRouter);
 app.use('/api/v1/works',IsAuth, workRouter);
 app.use('/api/v1/profile',IsAuth, profileRouter);
+app.use('/api/v1/roles', IsAuth, roleRouter);
 
 
 

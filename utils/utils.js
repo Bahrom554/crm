@@ -38,7 +38,6 @@ exports.getPagination = getPagination;
 exports.seedUser = async function () {
     
     const passwordHash = await bcrypt.hash(config.userPassword, 10);
-    await Models.role.bulkCreate(rolers, { ignoreDuplicates: true });
     await Models.user.bulkCreate([{
         username:config.userName,
          password: passwordHash,
@@ -53,3 +52,7 @@ exports.seedUser = async function () {
       });
     
 };
+
+exports.seedRoles = async function() {
+    await Models.role.bulkCreate(rolers, { ignoreDuplicates: true });
+}

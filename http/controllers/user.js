@@ -72,18 +72,6 @@ exports.delete = async (req, res, next) => {
         next(err);
     }
 }
-
-exports.getRoles = async (req, res, next) => {
-    try {
-        let result = await userService.getRoles();
-        res.json(result)
-
-    } catch (err) {
-        err.statusCode = err.statusCode || 500;
-        next(err);
-    }
-}
-
 exports.statistics = async (req, res, next) => {
     try {
         res.json(await userService.statistics())

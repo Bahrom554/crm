@@ -2,12 +2,13 @@ const Models = require('../../schema/main/models');
 const config = require('../../config/app')()
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const redisClient = require('../../config/redis')
 
-exports.login =  (data) => {
+exports.login = (data) => {
 
-    const {username, password} = data;
+    const { username, password } = data;
     let loadedUser;
-     return Models.user.unscoped().findOne({where:{username: username}, include:[{model:Models.role, as: 'role'}]})
+    return Models.user.unscoped().findOne({ where: { username: username }, include: [{ model: Models.role, as: 'role' }] })
         .then(user => {
             if (!user) {
                 console.log(username)
@@ -25,16 +26,21 @@ exports.login =  (data) => {
                 error.statusCode = 401;
                 throw error;
             }
-            // if (loadedUser.permissions) redisClient.sadd([`${loadedUser._id}:permissions`, ...loadedUser.permissions])
+            if (loadedUser.role) {
+                if (role.permissions) {
+                    redisClient.sadd([`${loadedUser.id}:permissions`, ...loadedUser.role.permissions])
+                }
+            }
+
             const token = jwt.sign(
-                {    
+                {
                     role: loadedUser?.role?.name || null,
                     id: loadedUser.id
                 },
                 config.jwtSecretUser,
-                {expiresIn: '1d'}
+                { expiresIn: '1d' }
             );
-            return {token: token};
+            return { token: token };
         })
-    
+
 }

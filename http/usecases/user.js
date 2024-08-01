@@ -223,9 +223,7 @@ exports.delete = async function (id) {
     };
 };
 
-exports.getRoles = async function () {
-    return await Models.role.findAll({});
-}
+
 
 async function getUser(id) {
     let user = await Models.user.findOne({

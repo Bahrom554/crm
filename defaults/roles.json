@@ -2,30 +2,79 @@
     {
         "code": 1,
         "name": "hr",
-        "permissions":["data:create","data:update"]
+        "permissions": [
+            "user:create",
+            "user:update",
+            "user:list",
+            "user:one",
+            "user:delete",
+            "user:statistics",
+            "object:list",
+            "object:one",
+            "object:assign-user",
+            "role:list",
+            "role:update"
+        ]
     },
     {
         "code": 2,
-        "name": "accountant"
+        "name": "accountant",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
     },
     {
         "code": 3,
-        "name": "pto"
+        "name": "pto",
+        "permissions": [
+            "object:create",
+            "object:update",
+            "object:list",
+            "object:one",
+            "object:delete",
+            "material:create",
+            "material:update",
+            "material:list",
+            "material:one",
+            "material:delete",
+            "work:create",
+            "work:update",
+            "work:list",
+            "work:one",
+            "work:delete"
+        ]
     },
     {
         "code": 4,
-        "name": "mechanic"
+        "name": "mechanic",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
     },
     {
         "code": 5,
-        "name": "foreman"
+        "name": "prorab",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
     },
     {
         "code": 6,
-        "name": "storekeeper"
+        "name": "Taminotchi",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
     },
     {
         "code": 7,
-        "name": "ceo"
+        "name": "ceo",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
     }
 ]
