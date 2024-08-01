@@ -1,7 +1,8 @@
 const Models = require('../schema/main/models');
 const config = require('../config/app')();
 const bcrypt = require('bcrypt');
-let rolers = require('../defaults/roles.json')
+let roles = require('../defaults/roles.json');
+const CONST = require('../utils/constants')
 
 const makePagination = function (data, options, totalDocs) {
 
@@ -36,23 +37,33 @@ const getPagination = async function (Model, query, options, order = [], include
 exports.getPagination = getPagination;
 
 exports.seedUser = async function () {
-    
+    await createRoles();
     const passwordHash = await bcrypt.hash(config.userPassword, 10);
-    await Models.user.bulkCreate([{
-        username:config.userName,
-         password: passwordHash,
-         firstName: "Hr test name",
-         lastName: "Hr test lastname",
-         midName: "Hr test midname",
-         phone: "998006767",
-         salary: 123123.123123,
-         role_id: 1,
-        }],{
-        ignoreDuplicates: true,
-      });
-    
+    let role = await Models.role.findOrCreate({ where: { code: CONST.role_codes.superadmin }, defaults: { name: "superAdmin" } });
+
+    await Models.user.findOrCreate({
+        where: { username: config.userName }, defaults: {
+            firstName: "super",
+            lastName: "admin",
+            midName: "admin",
+            phone: "999999999",
+            password: passwordHash,
+            role_id: role?.id || null
+        }
+    })
+
 };
 
-exports.seedRoles = async function() {
-    await Models.role.bulkCreate(rolers, { ignoreDuplicates: true });
+async function createRoles() {
+    for (let i = 0; i < roles.length; i++) {
+        let r = roles[i];
+        let role = await Models.role.findOne({ where: { code: r.code } });
+        if (role) {
+            role.permissions = r.permissions;
+            await role.save();
+        }
+        else {
+            await Models.role.create(r);
+        }
+    }
 }

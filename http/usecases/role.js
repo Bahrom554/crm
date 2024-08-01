@@ -1,7 +1,7 @@
 const Models = require('../../schema/main/models');
 
 exports.getRoles = async function () {
-    return await Models.role.findAll({});
+    return await Models.role.findAll({ where: { code: { [Op.ne]: 1 } } });
 }
 
 exports.update = async function (id, data) {

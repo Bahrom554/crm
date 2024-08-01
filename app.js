@@ -30,13 +30,13 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
-app.use('/api/v1/files',IsAuth, fileRouter);
+app.use('/api/v1/files', IsAuth, fileRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', IsAuth, userRouter);
-app.use('/api/v1/objects',IsAuth, objectRouter);
-app.use('/api/v1/materials',IsAuth, materialRouter);
-app.use('/api/v1/works',IsAuth, workRouter);
-app.use('/api/v1/profile',IsAuth, profileRouter);
+app.use('/api/v1/objects', IsAuth, objectRouter);
+app.use('/api/v1/materials', IsAuth, materialRouter);
+app.use('/api/v1/works', IsAuth, workRouter);
+app.use('/api/v1/profile', IsAuth, profileRouter);
 app.use('/api/v1/roles', IsAuth, roleRouter);
 
 
@@ -60,10 +60,12 @@ const server = require('http').createServer(app);
 
 Databases['main'].authenticate().then(async () => {
     console.log('DB Connection has been established successfully.');
-    Databases['main'].sync({
+
+    await Databases['main'].sync({
         alter: true
     });
     await Util.seedUser();
+
     /* Creating uploads directory if it does not exist */
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, {

@@ -16,13 +16,13 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
         },
         code: {
-         type: DataTypes.INTEGER,
-         allowNull: false,
-         unique: true
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            unique: true
         },
         permissions: {
-         type: DataTypes.JSONB,
-         allowNull: true
+            type: DataTypes.JSONB,
+            allowNull: true
         },
         created_at: {
             type: DataTypes.DATE,

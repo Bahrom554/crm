@@ -10,7 +10,7 @@ module.exports = () => {
         appVersion: process.env.APP_VERSION,
         jwtSecretUser: process.env.JWT_USER_SECRET,
         jwtExpiresIn: process.env.JWT_EXPIRES_IN,
-        userName: process.env.USER_NAME || 'username',
-        userPassword: process.env.USER_PASSWORD || 'password'
+        userName: process.env.USER_NAME || 'super_admin',
+        userPassword: process.env.USER_PASSWORD || 'secret@password'
     };
 };
