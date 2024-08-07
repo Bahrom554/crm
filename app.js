@@ -12,6 +12,8 @@ const materialRouter = require('./routes/material');
 const workRouter = require('./routes/worker');
 const profileRouter = require('./routes/profile');
 const roleRouter = require('./routes/roles');
+const groupRouter = require('./routes/group');
+const orderMaterial = require('./routes/order_material');
 const CONST = require("./utils/constants");
 const dir = CONST.defaults.UPLOAD_DIR;
 const fs = require('fs');
@@ -38,6 +40,8 @@ app.use('/api/v1/materials', IsAuth, materialRouter);
 app.use('/api/v1/works', IsAuth, workRouter);
 app.use('/api/v1/profile', IsAuth, profileRouter);
 app.use('/api/v1/roles', IsAuth, roleRouter);
+app.use('/api/v1/groups', IsAuth, groupRouter);
+app.use('/api/v1/order-materials', IsAuth, orderMaterial);
 
 
 

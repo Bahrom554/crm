@@ -46,7 +46,11 @@
             "work:update",
             "work:list",
             "work:one",
-            "work:delete"
+            "work:delete",
+            "group:create",
+            "group:list",
+            "group:update",
+            "group:delete"
         ]
     },
     {
@@ -67,7 +71,7 @@
     },
     {
         "code": 7,
-        "name": "Taminotchi",
+        "name": "Supplier",
         "permissions": [
             "data:create",
             "data:update",

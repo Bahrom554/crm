@@ -16,16 +16,6 @@ module.exports = function (sequelize, DataTypes) {
             }
 
         },
-        role_id: {
-            type: DataTypes.BIGINT,
-            allowNull: false,
-            references: {
-                model: {
-                    tableName: 'roles',
-                },
-                key: 'id'
-            }
-        },
         user_id: {
             type: DataTypes.BIGINT,
             allowNull: false,

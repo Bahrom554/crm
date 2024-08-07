@@ -11,6 +11,6 @@ router.get('/:id', permissionMiddleware("object:one"), validationMiddleware(obje
 router.put('/:id', permissionMiddleware("object:update"), validationMiddleware(objectValidator.update,), objectController.update);
 router.delete('/:id', permissionMiddleware("object:delete"), objectController.delete);
 
-router.post('/:id/assign-users', permissionMiddleware("object:assign-user"), validationMiddleware(objectValidator.userAssign), objectController.userAssign);
+router.put('/:id/assign-users', permissionMiddleware("object:assign-user"), validationMiddleware(objectValidator.userAssign), objectController.userAssign);
 
 module.exports = router;

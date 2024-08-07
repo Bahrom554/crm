@@ -3,7 +3,6 @@ const userService = require('../usecases/user');
 exports.create = async (req, res, next) => {
     try {
         let creator_id = req.user.id;
-        console.log("aasd", creator_id)
         res.status(201).json(await userService.create(creator_id, req.body));
     } catch (err) {
         err.statusCode = err.statusCode || 500;

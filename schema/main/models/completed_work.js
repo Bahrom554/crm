@@ -1,21 +1,23 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('material', {
+    return sequelize.define('completed_work', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
-        code: {
+        comment: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        unity: {
-            type: DataTypes.STRING,
-            allowNull: false
+        work_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: {
+                    tableName: 'works'
+                },
+                key: 'id'
+            }
         },
         amount: {
             type: DataTypes.DECIMAL,
@@ -28,16 +30,6 @@ module.exports = function (sequelize, DataTypes) {
         totalCost: {
             type: DataTypes.DECIMAL,
             allowNull: false
-        },
-        group_id: {
-            type: DataTypes.BIGINT,
-            allowNull: true,
-            references: {
-                model: {
-                    tableName: 'groups'
-                },
-                key: 'id'
-            }
         },
         creator_id: {
             type: DataTypes.BIGINT,
@@ -71,13 +63,8 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'materials',
+        tableName: 'works',
         schema: 'public',
         timestamps: false,
-        indexes: [{
-            unique: true,
-            fields: ['code', 'object_id']
-        }]
-
     })
 }

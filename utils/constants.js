@@ -5,7 +5,7 @@ exports.role_codes = {
     pto: 4,
     mechanic: 5,
     prorab: 6,
-    taminotchi: 7,
+    supplier: 7,
     ceo: 8
 }
 

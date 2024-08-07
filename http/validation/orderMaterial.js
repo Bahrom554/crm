@@ -1,23 +1,19 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        code: Joi.string().max(10).required(),
-        name: Joi.string().required(),
-        unity: Joi.string().max(10).required(),
-        amount: Joi.number().optional().allow(null),
-        cost: Joi.number().optional().allow(null),
-        object_id: Joi.number().required(),
-        group_id: Joi.number().required()
+        material_id: Joi.number().required(),
+        supplier_id: Joi.number().required(),
+        amount: Joi.number().required(),
+        cost: Joi.number().required(),
+        object_id: Joi.number().required()
     }),
 
     update: Joi.object().keys({
-        code: Joi.string().max(10),
-        name: Joi.string(),
-        unity: Joi.string(),
+        material_id: Joi.number(),
+        supplier_id: Joi.number(),
         amount: Joi.number().optional().allow(null),
         cost: Joi.number().optional().allow(null),
-        object_id: Joi.number(),
-        group_id: Joi.number()
+        object_id: Joi.number()
 
     }),
 
@@ -27,8 +23,9 @@ const object = {
         page: Joi.number().optional().min(1),
         limit: Joi.number().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        group_id: Joi.number().optional(),
-        object_id: Joi.number().optional()
+        material_id: Joi.number().optional(),
+        object_id: Joi.number().optional(),
+        supplier_id: Joi.number().optional(),
     }),
 
     materialId: Joi.object().keys({
