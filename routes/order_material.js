@@ -1,5 +1,5 @@
 const express = require('express');
-const router =express.Router();
+const router = express.Router();
 const orderMaterialController = require('../http/controllers/orderMaterial.js');
 const validationMiddleware = require('../http/middlewares/validator');
 const orderMaterialValidator = require('../http/validation/orderMaterial');

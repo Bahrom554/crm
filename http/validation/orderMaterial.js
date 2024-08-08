@@ -3,16 +3,16 @@ const object = {
     create: Joi.object().keys({
         material_id: Joi.number().required(),
         supplier_id: Joi.number().required(),
-        amount: Joi.number().required(),
-        cost: Joi.number().required(),
+        amount: Joi.number().unsafe().required(),
+        cost: Joi.number().unsafe().required(),
         object_id: Joi.number().required()
     }),
 
     update: Joi.object().keys({
         material_id: Joi.number(),
         supplier_id: Joi.number(),
-        amount: Joi.number().optional().allow(null),
-        cost: Joi.number().optional().allow(null),
+        amount: Joi.number().unsafe().optional().allow(null),
+        cost: Joi.number().unsafe().optional().allow(null),
         object_id: Joi.number()
 
     }),

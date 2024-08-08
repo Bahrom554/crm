@@ -6,11 +6,11 @@ const moment = require('moment')
 
 exports.create = async (id, data) => {
 
-    await customValidation(data);
+     await customValidation(data);
     data.totalCost = data.cost * data.amount;
     data.creator_id = id;
 
-    return Models.material.create(data);
+    return Models.order_material.create(data);
 }
 
 exports.getAll = async (options) => {
@@ -140,9 +140,8 @@ async function customValidation(data) {
     }
 
     if (data.supplier_id) {
-        let object = await Models.user.findByPk(data.supplier_id);
-
-        if (!object || !(object?.role?.code == CONSTANTS.role_codes.supplier)) {
+        let user = await Models.user.findByPk(data.supplier_id);
+        if (!user || user?.role?.code != CONSTANTS.role_codes.supplier) {
             let err = new Error(`suppliar not found or this user not suppliar! whit this id: ${data.supplier_id}`);
             err.statusCode = 422;
             throw err;

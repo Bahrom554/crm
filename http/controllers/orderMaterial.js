@@ -20,7 +20,7 @@ exports.getAll = async (req, res, next) => {
         const material_id = req.query.material_id ||null;
         const object_id = req.query.object_id || null;
         const supplier_id = req.query.supplier_id || null;
-        let result = await orderMaterialService.getAll({page, limit, from , to, group_id, object_id, supplier_id, material_id});
+        let result = await orderMaterialService.getAll({page, limit, from , to, object_id, supplier_id, material_id});
         res.json(result)
 
     } catch (err) {
