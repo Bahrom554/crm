@@ -65,17 +65,27 @@
         "code": 6,
         "name": "prorab",
         "permissions": [
-            "data:create",
-            "data:update"
+            "object:list",
+            "material:list",
+            "user:list",
+            "work:list",
+            "completedWork:create",
+            "completedWork:list",
+            "completedWork:one",
+            "completedWork:update",
+            "completedWork:delete",
+            "orderMaterial:create",
+            "orderMaterial:list",
+            "orderMaterial:one",
+            "orderMaterial:update",
+            "orderMaterial:delete"
         ]
     },
     {
         "code": 7,
         "name": "Supplier",
         "permissions": [
-            "data:create",
-            "data:update",
-            "data:list"
+            "orderMaterial:list"
         ]
     },
     {

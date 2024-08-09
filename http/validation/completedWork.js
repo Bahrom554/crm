@@ -1,20 +1,21 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        material_id: Joi.number().required(),
-        supplier_id: Joi.number().required(),
+        work_id: Joi.number().required(),
         amount: Joi.number().unsafe().required(),
         cost: Joi.number().unsafe().required(),
-        object_id: Joi.number().required()
+        object_id: Joi.number().required(),
+        comment: Joi.string().optional(),
+        files: Joi.array().items(Joi.number()).required()
     }),
 
     update: Joi.object().keys({
-        material_id: Joi.number(),
-        supplier_id: Joi.number(),
-        amount: Joi.number().unsafe().optional().allow(null),
-        cost: Joi.number().unsafe().optional().allow(null),
-        object_id: Joi.number()
-
+        work_id: Joi.number(),
+        amount: Joi.number().unsafe(),
+        cost: Joi.number().unsafe(),
+        object_id: Joi.number(),
+        comment: Joi.string().optional(),
+        files: Joi.array().items(Joi.number())
     }),
 
     queryParams: Joi.object().keys({
@@ -23,9 +24,8 @@ const object = {
         page: Joi.number().optional().min(1),
         limit: Joi.number().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        material_id: Joi.number().optional(),
+        work_id: Joi.number().optional(),
         object_id: Joi.number().optional(),
-        supplier_id: Joi.number().optional(),
     }),
 
     id: Joi.object().keys({

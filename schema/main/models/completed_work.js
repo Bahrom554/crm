@@ -63,7 +63,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'works',
+        tableName: 'completed_works',
         schema: 'public',
         timestamps: false,
     })

@@ -14,6 +14,7 @@ const profileRouter = require('./routes/profile');
 const roleRouter = require('./routes/roles');
 const groupRouter = require('./routes/group');
 const orderMaterial = require('./routes/order_material');
+const completedWork = require('./routes/completed_work');
 const CONST = require("./utils/constants");
 const dir = CONST.defaults.UPLOAD_DIR;
 const fs = require('fs');
@@ -42,6 +43,7 @@ app.use('/api/v1/profile', IsAuth, profileRouter);
 app.use('/api/v1/roles', IsAuth, roleRouter);
 app.use('/api/v1/groups', IsAuth, groupRouter);
 app.use('/api/v1/order-materials', IsAuth, orderMaterial);
+app.use('/api/v1/completed-works', IsAuth, completedWork);
 
 
 

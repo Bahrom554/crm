@@ -51,14 +51,19 @@ function initModels(sequelize) {
     user.belongsToMany(object, { as: 'objects', through: member, foreignKey: 'user_id', otherKey: 'object_id' });
 
 
-   file.belongsToMany(completed_work,{through:'completed_work_file'});
-   completed_work.belongsToMany(file,{through:'completed_work_file'});  
+   
 
 
    order_material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id'});
    order_material.belongsTo(object, { foreignKey: 'object_id'});
    order_material.belongsTo(material, { foreignKey: 'material_id'});
    order_material.belongsTo(user, { as: 'supplier', foreignKey: 'supplier_id'});
+
+   completed_work.belongsTo(object, { foreignKey: 'object_id'});
+   completed_work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id'});
+   completed_work.belongsTo(work,{foreignKey: 'work_id'});
+   file.belongsToMany(completed_work,{through:'completed_work_file'});
+   completed_work.belongsToMany(file,{through:'completed_work_file'});  
 
     return {
         user,

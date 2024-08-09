@@ -6,11 +6,17 @@ const moment = require('moment')
 
 exports.create = async (id, data) => {
 
-     await customValidation(data);
+    await customValidation(data);
     data.totalCost = data.cost * data.amount;
     data.creator_id = id;
+    // for(let i=0; i< data.files.length; i++){
+    //     let file_id = data.files[i];
 
-    return Models.order_material.create(data);
+    // }
+
+    let work = await Models.completed_work.create(data);
+    await work.addFiles(data.files);
+    return await getWork(work.id);
 }
 
 exports.getAll = async (options) => {
@@ -19,14 +25,11 @@ exports.getAll = async (options) => {
     let include = [{
         model: Models.object,
     }];
-    if (options.material_id) {
-        subQuery.push({ material_id: options.material_id })
+    if (options.work_id) {
+        subQuery.push({ work_id: options.work_id })
     }
     if (options.object_id) {
         subQuery.push({ object_id: options.object_id })
-    }
-    if (options.supplier_id) {
-        subQuery.push({ supplier_id: options.supplier_id })
     }
     if (options.from && options.to) {
 
@@ -54,12 +57,12 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    return Utils.getPagination(Models.order_material, query, options, [], include);
+    return Utils.getPagination(Models.completed_work, query, options, [], include);
 }
 
 exports.getOne = async (id) => {
 
-    return await getmaterial(id);
+    return await getWork(id);
 }
 
 exports.update = async (id, data) => {
@@ -68,63 +71,64 @@ exports.update = async (id, data) => {
 
     data.totalCost = data.amount * data.cost;
 
-    await Models.order_material.update(data, { where: { id: id } });
+    await Models.completed_work.update(data, { where: { id: id } });
 
-    return await getmaterial(id);
+    let work = await getWork(id);
+    if (data.files) {
+        await work.setFiles(data.files);
+    }
+    return await getWork(id);
 }
 
 exports.delete = async function (id) {
-    let material = await Models.order_material.destroy({
+    let work = await Models.completed_work.destroy({
         where: {
             id: id
         }
     });
 
-    if (!material) {
-        let err = new Error('order material not found');
+    if (!work) {
+        let err = new Error('completed work not found');
         err.statusCode = 404;
         throw err;
     }
 
     return {
-        message: 'order material was deleted successfully.'
+        message: 'completed work was deleted successfully.'
     };
 };
 
-async function getmaterial(id) {
-    let material = await Models.order_material.findOne({
+async function getWork(id) {
+    let work = await Models.completed_work.findOne({
         where: {
             id: id
         },
 
         include: [{
             model: Models.object,
-        }, {
-            model: Models.user,
-            as: 'creator',
-
-        }, {
-            model: Models.user,
-            as: 'supplier'
         },
         {
-            model: Models.material,
+            model: Models.work,
+
+        },
+        {
+            model: Models.file,
 
         }]
     });
-    if (!material) {
-        let err = new Error('order-material not found');
+    if (!work) {
+        let err = new Error('completedWork not found');
         err.statusCode = 404;
         throw err;
     }
-    return material;
+    return work;
 }
 
 async function customValidation(data) {
-    if (data.material_id) {
-        let group = await Models.material.findByPk(data.material_id);
-        if (!group) {
-            let err = new Error(`material not found! whit this id: ${data.material_id}`);
+    if (data.work_id) {
+        let d = await Models.work.findByPk(data.work_id);
+        if (!d) {
+            let err = new Error(`work not found! whit this id: ${data.work_id}`);
             err.statusCode = 422;
             throw err;
         }
@@ -134,15 +138,6 @@ async function customValidation(data) {
         let object = await Models.object.findByPk(data.object_id);
         if (!object) {
             let err = new Error(`object not found! whit this id: ${data.object_id}`);
-            err.statusCode = 422;
-            throw err;
-        }
-    }
-
-    if (data.supplier_id) {
-        let user = await Models.user.findByPk(data.supplier_id,{include: 'role'});
-        if (!user || user?.role?.code != CONSTANTS.role_codes.supplier) {
-            let err = new Error(`suppliar not found or this user not suppliar! whit this id: ${data.supplier_id}`);
             err.statusCode = 422;
             throw err;
         }
