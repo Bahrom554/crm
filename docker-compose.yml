@@ -19,10 +19,7 @@ services:
     env_file:
       - .env.db
   redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6380:6379"      
+    image: redis:latest      
   nginx:
     build:
       context: ./nginx/
