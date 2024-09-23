@@ -7,9 +7,8 @@ const moment = require('moment')
 exports.create = async (id, data) => {
 
      await customValidation(data);
-    data.totalCost = data.cost * data.amount;
-    data.creator_id = id;
-
+     data.creator_id = id;
+     
     return Models.order_material.create(data);
 }
 

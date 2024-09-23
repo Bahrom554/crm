@@ -61,8 +61,18 @@ app.use((error, req, res, next) => {
 });
 const Databases = require('./db');
 
-
+const { Server } = require("socket.io");
 const server = require('http').createServer(app);
+
+const IO = new Server(server, {
+    cors: {
+        origin: '*'
+    }
+
+});
+
+const socketManager = new (require('./socket/socketManager'))(IO);
+
 
 Databases['main'].authenticate().then(async () => {
     console.log('DB Connection has been established successfully.');

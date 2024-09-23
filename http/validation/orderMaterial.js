@@ -1,18 +1,23 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        material_id: Joi.number().required(),
+        material_id: Joi.number().optional(),
+        name: Joi.string().when('material_id',{
+            is: Joi.exist(),
+            then: Joi.optional(),
+			otherwise: Joi.required(),
+
+        }),
         supplier_id: Joi.number().required(),
         amount: Joi.number().unsafe().required(),
-        cost: Joi.number().unsafe().required(),
         object_id: Joi.number().required()
     }),
 
     update: Joi.object().keys({
         material_id: Joi.number(),
+        name: Joi.string(),
         supplier_id: Joi.number(),
         amount: Joi.number().unsafe().optional().allow(null),
-        cost: Joi.number().unsafe().optional().allow(null),
         object_id: Joi.number()
 
     }),

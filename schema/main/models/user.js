@@ -17,6 +17,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(256),
             allowNull: false
         },
+        is_online: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         role_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
@@ -74,7 +78,7 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false,
         defaultScope: {
             attributes: { exclude: ['password'] } // exclude 'password' by default
-          }
+        }
 
     });
 };

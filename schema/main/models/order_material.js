@@ -12,11 +12,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         cost: {
             type: DataTypes.DECIMAL,
-            allowNull: false
+            allowNull: true
         },
         totalCost: {
             type: DataTypes.DECIMAL,
-            allowNull: false
+            allowNull: true
         },
         material_id: {
             type: DataTypes.BIGINT,
@@ -27,6 +27,10 @@ module.exports = function (sequelize, DataTypes) {
                 },
                 key: 'id'
             }
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         status: {
             type: DataTypes.INTEGER,
