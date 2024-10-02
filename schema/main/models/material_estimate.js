@@ -1,48 +1,39 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('order_material', {
+    return sequelize.define('material_estimate', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
-
+        code: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        unity: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         amount: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
         cost: {
             type: DataTypes.DECIMAL,
-            allowNull: true
+            allowNull: false
         },
         totalCost: {
             type: DataTypes.DECIMAL,
-            allowNull: true
+            allowNull: false
         },
-        material_id: {
+        type_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
-                model: {
-                    tableName: 'materials'
-                },
-                key: 'id'
-            }
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        status: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0
-        },
-        supplier_id: {
-            type: DataTypes.BIGINT,
-            allowNull: true,
-            references: {
-                model: {
-                    tableName: 'users'
-                },
+                model: "material_type",
                 key: 'id'
             }
         },
@@ -78,9 +69,13 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'order_materials',
+        tableName: 'material_estimates',
         schema: 'public',
-        timestamps: false
+        timestamps: false,
+        indexes: [{
+            unique: true,
+            fields: ['code', 'object_id']
+        }]
 
     })
 }

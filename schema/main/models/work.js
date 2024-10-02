@@ -5,13 +5,19 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
-        name: {
+        comment: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true
         },
-        unity: {
-            type: DataTypes.STRING,
-            allowNull: false
+        work_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: {
+                    tableName: 'works'
+                },
+                key: 'id'
+            }
         },
         amount: {
             type: DataTypes.DECIMAL,
@@ -50,6 +56,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
+        created_at: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
         updated_at: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -57,14 +68,8 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'works',
+        tableName: 'completed_works',
         schema: 'public',
         timestamps: false,
-        indexes: [{
-            unique: true,
-            fields: ['name', 'object_id']
-        }]
-        
-
     })
 }

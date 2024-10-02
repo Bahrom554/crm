@@ -4,37 +4,53 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             type: DataTypes.BIGINT,
             primaryKey: true,
-        },
-        code: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        unity: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+        }, 
         amount: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
         cost: {
             type: DataTypes.DECIMAL,
-            allowNull: false
+            allowNull: true
         },
         totalCost: {
             type: DataTypes.DECIMAL,
-            allowNull: false
+            allowNull: true
         },
-        group_id: {
+        material_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: 'material_estimate',
+                key: 'id'
+            }
+        },
+        work_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        references: {
+            model:'work',
+            key: 'id'
+        }
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        files:{
+         type: DataTypes.JSONB,
+         allowNull: true
+        },
+        status: {
+            type: DataTypes.STRING,
+            defaultValue: 'waiting'
+        },
+        supplier_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
                 model: {
-                    tableName: 'groups'
+                    tableName: 'users'
                 },
                 key: 'id'
             }
@@ -73,11 +89,7 @@ module.exports = function (sequelize, DataTypes) {
         sequelize,
         tableName: 'materials',
         schema: 'public',
-        timestamps: false,
-        indexes: [{
-            unique: true,
-            fields: ['code', 'object_id']
-        }]
+        timestamps: false
 
     })
 }
