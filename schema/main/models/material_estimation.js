@@ -1,13 +1,17 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('work_estimate', {
+    return sequelize.define('material_estimation', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
+        code: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: false
         },
         unity: {
             type: DataTypes.STRING,
@@ -21,17 +25,17 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        type_id: {
-          type: DataTypes.BIGINT,
-          allowNull: false,
-          references: {
-            model:'work_type',
-            key: 'id'
-          }
-        },
         totalCost: {
             type: DataTypes.DECIMAL,
             allowNull: false
+        },
+        type_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: "material_type",
+                key: 'id'
+            }
         },
         creator_id: {
             type: DataTypes.BIGINT,
@@ -65,14 +69,13 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'work_estimates',
+        tableName: 'material_estimations',
         schema: 'public',
         timestamps: false,
         indexes: [{
             unique: true,
-            fields: ['name', 'object_id']
+            fields: ['code', 'object_id']
         }]
-        
 
     })
 }

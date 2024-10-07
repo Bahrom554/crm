@@ -9,12 +9,12 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: true
         },
-        work_id: {
+        estimation_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
                 model: {
-                    tableName: 'works'
+                    tableName: 'work_estimations'
                 },
                 key: 'id'
             }
@@ -68,7 +68,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'completed_works',
+        tableName: 'works',
         schema: 'public',
         timestamps: false,
     })

@@ -7,7 +7,7 @@ const object = {
         amount: Joi.number().optional().allow(null),
         cost: Joi.number().optional().allow(null),
         object_id: Joi.number().required(),
-        group_id: Joi.number().required()
+        type_id: Joi.number().required()
     }),
 
     update: Joi.object().keys({
@@ -17,7 +17,7 @@ const object = {
         amount: Joi.number().optional().allow(null),
         cost: Joi.number().optional().allow(null),
         object_id: Joi.number(),
-        group_id: Joi.number()
+        type_id: Joi.number()
 
     }),
 
@@ -27,7 +27,7 @@ const object = {
         page: Joi.number().optional().min(1),
         limit: Joi.number().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        group_id: Joi.number().optional(),
+        type_id: Joi.number().optional(),
         object_id: Joi.number().optional()
     }),
 

@@ -17,11 +17,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL,
             allowNull: true
         },
-        material_id: {
+        estimation_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
-                model: 'material_estimate',
+                model: 'material_estimation',
                 key: 'id'
             }
         },
@@ -55,7 +55,7 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        creator_id: {
+        worker_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {

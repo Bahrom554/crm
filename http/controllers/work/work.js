@@ -1,4 +1,4 @@
-const completedWorkService = require('../usecases/completedWork.js');
+const completedWorkService = require('../../usecases/completedWork.js');
 
 exports.create = async (req, res, next) => {
     try {

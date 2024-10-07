@@ -4,12 +4,15 @@ const _role = require('./role');
 const _file = require('./file')
 const _user_file = require('./user_file');
 const _object = require('./object');
-const _material = require('./material');
-const _work = require('./work');
 const _member = require('./member');
-const _group = require('./group');
-const _order_material = require('./order_material');
-const _completed_word = require('./completed_work');
+
+const _work_estimation = require('./work_estimation');
+const _work_type = require('./work_type');
+const work = require('./work');
+
+const _material_estimation = require('./material_estimation');
+const _material_type = require('./material_type');
+const _material = require('./material');
 
 
 function initModels(sequelize) {
@@ -18,12 +21,15 @@ function initModels(sequelize) {
     const file = _file(sequelize, DataTypes);
     const user_file = _user_file(sequelize, DataTypes);
     const object = _object(sequelize, DataTypes);
-    const material = _material(sequelize, DataTypes);
-    const work = _work(sequelize, DataTypes);
     const member = _member(sequelize, DataTypes);
-    const group = _group(sequelize, DataTypes);
-    const order_material = _order_material(sequelize, DataTypes);
-    const completed_work = _completed_word(sequelize, DataTypes);
+
+    const work_estimation = _work_estimation(sequelize, DataTypes);
+    const work_type = _work_type(sequelize, DataTypes);
+    const work = work(sequelize, DataTypes);
+
+    const material_estimation = _material_estimation(sequelize, DataTypes);
+    const material_type = _material_type(sequelize, DataTypes);
+    const material = _material(sequelize, DataTypes);
 
     user.belongsTo(role, { foreignKey: 'role_id', onDelete: 'SET NULL' });
     role.hasMany(user, { as: 'users', foreignKey: 'role_id' });
@@ -31,39 +37,44 @@ function initModels(sequelize) {
     user.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
     file.belongsToMany(user, { as: 'users', through: 'user_file' });
     object.belongsTo(file, { as: 'file', foreignKey: 'file_id' });
-
     object.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
     user.hasMany(object, { as: 'createdObjects', foreignKey: 'creator_id' });
 
-    material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
-    user.hasMany(material, { as: 'materials', foreignKey: 'creator_id' });
-    object.hasMany(material, { as: 'materials', foreignKey: 'object_id' });
-    material.belongsTo(object, { foreignKey: 'object_id' });
-    material.belongsTo(group, { foreignKey: 'group_id' });
-    group.hasMany(material, { as: 'materials', foreignKey: 'group_id' });
+    material_estimation.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    material_estimation.belongsTo(material_type, { as: 'type', foreignKey: 'type_id' });
+    material_estimation.belongsTo(object, { foreignKey: 'object_id' });
+    object.hasMany(material_estimation, { as: 'material_estimations', foreignKey: 'object_id' });
 
-    work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
-    user.hasMany(work, { as: 'works', foreignKey: 'creator_id' });
-    object.hasMany(work, { as: 'works', foreignKey: 'object_id' });
+    work_estimation.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    work_estimation.belongsTo(work_type, { as: 'type', foreignKey: 'type_id' });
+    work_estimation.belongsTo(object, { foreignKey: 'object_id' });
+    object.hasMany(work_estimation, { as: 'work_estimations', foreignKey: 'object_id' });
+
     work.belongsTo(object, { foreignKey: 'object_id' });
+    work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    work.belongsTo(work, { foreignKey: 'work_id' });
+    file.belongsToMany(work, { through: 'work_file' });
+    work.belongsToMany(file, { through: 'work_file' });
+
+    material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    material.belongsTo(object, { foreignKey: 'object_id' });
+    material.belongsTo(material_estimation, { foreignKey: 'estimation_id' });
+    material.belongsTo(user, { as: 'supplier', foreignKey: 'supplier_id' });
+
+
+
+
 
     object.belongsToMany(user, { as: 'members', through: member, foreignKey: 'object_id', otherKey: 'user_id' });
     user.belongsToMany(object, { as: 'objects', through: member, foreignKey: 'user_id', otherKey: 'object_id' });
 
 
-   
 
 
-   order_material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id'});
-   order_material.belongsTo(object, { foreignKey: 'object_id'});
-   order_material.belongsTo(material, { foreignKey: 'material_id'});
-   order_material.belongsTo(user, { as: 'supplier', foreignKey: 'supplier_id'});
 
-   completed_work.belongsTo(object, { foreignKey: 'object_id'});
-   completed_work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id'});
-   completed_work.belongsTo(work,{foreignKey: 'work_id'});
-   file.belongsToMany(completed_work,{through:'completed_work_file'});
-   completed_work.belongsToMany(file,{through:'completed_work_file'});  
+
+
+
 
     return {
         user,
@@ -71,11 +82,11 @@ function initModels(sequelize) {
         file,
         user_file,
         object,
-        material,
         work,
-        group,
-        order_material,
-        completed_work
+        material_type,
+        material_estimation,
+        material,
+        work
 
     }
 
