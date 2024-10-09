@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        work_id: Joi.number().required(),
+        estimation_id: Joi.number().required(),
         amount: Joi.number().unsafe().required(),
         cost: Joi.number().unsafe().required(),
         object_id: Joi.number().required(),
@@ -10,7 +10,7 @@ const object = {
     }),
 
     update: Joi.object().keys({
-        work_id: Joi.number(),
+        estimation_id: Joi.number(),
         amount: Joi.number().unsafe(),
         cost: Joi.number().unsafe(),
         object_id: Joi.number(),
@@ -24,7 +24,7 @@ const object = {
         page: Joi.number().optional().min(1),
         limit: Joi.number().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        work_id: Joi.number().optional(),
+        estimation_id: Joi.number().optional(),
         object_id: Joi.number().optional(),
     }),
 

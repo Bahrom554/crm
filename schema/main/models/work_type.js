@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('group_type', {
+    return sequelize.define('work_type', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
@@ -22,7 +22,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     }, {
         sequelize,
-        tableName: 'group_types',
+        tableName: 'work_types',
         schema: 'public',
         timestamps: false
 

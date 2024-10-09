@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        material_id: Joi.number().optional(),
-        name: Joi.string().when('material_id',{
+        estimation_id: Joi.number().optional(),
+        name: Joi.string().when('estimation_id',{
             is: Joi.exist(),
             then: Joi.optional(),
 			otherwise: Joi.required(),
@@ -14,7 +14,7 @@ const object = {
     }),
 
     update: Joi.object().keys({
-        material_id: Joi.number(),
+        estimation_id: Joi.number(),
         name: Joi.string(),
         supplier_id: Joi.number(),
         amount: Joi.number().unsafe().optional().allow(null),
@@ -28,7 +28,7 @@ const object = {
         page: Joi.number().optional().min(1),
         limit: Joi.number().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        material_id: Joi.number().optional(),
+        estimation_id: Joi.number().optional(),
         object_id: Joi.number().optional(),
         supplier_id: Joi.number().optional(),
     }),

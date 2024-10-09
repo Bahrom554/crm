@@ -1,6 +1,5 @@
-const Models = require("../../schema/main/models");
-const Utils = require('../../utils/utils');
-const CONSTANTS = require('../../utils/constants');
+const Models = require("../../../schema/main/models");
+const Utils = require('../../../utils/utils');
 const { Op } = require('sequelize');
 const moment = require('moment')
 
@@ -14,7 +13,7 @@ exports.create = async (id, data) => {
 
     // }
 
-    let work = await Models.completed_work.create(data);
+    let work = await Models.work.create(data);
     await work.addFiles(data.files);
     return await getWork(work.id);
 }
@@ -57,7 +56,7 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    return Utils.getPagination(Models.completed_work, query, options, [], include);
+    return Utils.getPagination(Models.work, query, options, [], include);
 }
 
 exports.getOne = async (id) => {
@@ -71,7 +70,7 @@ exports.update = async (id, data) => {
 
     data.totalCost = data.amount * data.cost;
 
-    await Models.completed_work.update(data, { where: { id: id } });
+    await Models.work.update(data, { where: { id: id } });
 
     let work = await getWork(id);
     if (data.files) {
@@ -81,7 +80,7 @@ exports.update = async (id, data) => {
 }
 
 exports.delete = async function (id) {
-    let work = await Models.completed_work.destroy({
+    let work = await Models.work.destroy({
         where: {
             id: id
         }
@@ -99,7 +98,7 @@ exports.delete = async function (id) {
 };
 
 async function getWork(id) {
-    let work = await Models.completed_work.findOne({
+    let work = await Models.work.findOne({
         where: {
             id: id
         },

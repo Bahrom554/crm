@@ -1,4 +1,4 @@
-const materialService = require('../../usecases/material/material.js');
+const materialService = require('../../usecases/material/material');
 
 exports.create = async (req, res, next) => {
     try{

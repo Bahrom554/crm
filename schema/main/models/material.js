@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
-                model: 'material_estimation',
+                model: 'material_estimations',
                 key: 'id'
             }
         },
@@ -29,7 +29,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.BIGINT,
         allowNull: true,
         references: {
-            model:'work',
+            model:'works',
             key: 'id'
         }
         },

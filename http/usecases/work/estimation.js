@@ -1,20 +1,20 @@
-const Models = require("../../schema/main/models");
-const Utils = require('../../utils/utils');
+const Models = require("../../../schema/main/models");
+const Utils = require('../../../utils/utils');
 const { Op } = require('sequelize');
 const moment = require('moment')
 
 exports.create = async (data) => {
 
-    let work = await Models.work.findOne({ where: { name: data.name, object_id: data.object_id } });
-    if (work) {
-        let err = new Error(`work has created with id ${work.id}!`);
+    let work_estimation = await Models.work_estimation.findOne({ where: { name: data.name, object_id: data.object_id } });
+    if (work_estimation) {
+        let err = new Error(`work_estimation has created with id ${work_estimation.id}!`);
         err.statusCode = 422;
         throw err;
     }
 
     data.totalCost = data.cost * data.amount;
 
-    return await Models.work.create(data);
+    return await Models.work_estimation.create(data);
 
 
 }
@@ -61,61 +61,61 @@ exports.getAll = async (options) => {
             [Op.and]: subQuery
         }
     }
-    return Utils.getPagination(Models.work, query, options, [], include);
+    return Utils.getPagination(Models.work_estimation, query, options, [], include);
 }
 
 exports.getOne = async (id) => {
 
-    return await getwork(id);
+    return await getwork_estimation(id);
 }
 
 exports.update = async (id, data) => {
 
-    let oldwork = await Models.work.findByPk(id);
-    if(!oldwork){
-        let err = new Error('work not found');
+    let oldwork_estimation = await Models.work_estimation.findByPk(id);
+    if(!oldwork_estimation){
+        let err = new Error('work_estimation not found');
         err.statusCode = 404;
         throw err;
     }
-    let work = await Models.work.findOne({
+    let work_estimation = await Models.work_estimation.findOne({
         where: {
-            name: data?.name || oldwork.name,
-            object_id: data?.object_id || oldwork.object_id,
+            name: data?.name || oldwork_estimation.name,
+            object_id: data?.object_id || oldwork_estimation.object_id,
             id: { [Op.ne]: id }
         }
     });
-    if(work){
-        let err = new Error(`work has created with id ${work.id}!`);
+    if(work_estimation){
+        let err = new Error(`work_estimation has created with id ${work_estimation.id}!`);
         err.statusCode = 422;
         throw err;
     }
     data.totalCost =data.amount * data.cost;
 
-    await Models.work.update(data, { where: { id: id } });
+    await Models.work_estimation.update(data, { where: { id: id } });
 
-    return await getwork(id);
+    return await getwork_estimation(id);
 }
 
 exports.delete = async function (id) {
-    let work = await Models.work.destroy({
+    let work_estimation = await Models.work_estimation.destroy({
         where: {
             id: id
         }
     });
 
-    if (!work) {
-        let err = new Error('work not found');
+    if (!work_estimation) {
+        let err = new Error('work_estimation not found');
         err.statusCode = 404;
         throw err;
     }
 
     return {
-        message: 'work was deleted successfully.'
+        message: 'work_estimation was deleted successfully.'
     };
 };
 
-async function getwork(id) {
-    let work = await Models.work.findOne({
+async function getwork_estimation(id) {
+    let work_estimation = await Models.work_estimation.findOne({
         where: {
             id: id
         },
@@ -128,10 +128,10 @@ async function getwork(id) {
 
         }]
     });
-    if (!work) {
-        let err = new Error('work not found');
+    if (!work_estimation) {
+        let err = new Error('work_estimation not found');
         err.statusCode = 404;
         throw err;
     }
-    return work;
+    return work_estimation;
 }

@@ -1,9 +1,9 @@
-const completedWorkService = require('../../usecases/completedWork.js');
+const workService = require('../../usecases/work/work');
 
 exports.create = async (req, res, next) => {
     try {
         let authId = req.user.id;
-        res.json(await completedWorkService.create(authId, req.body));
+        res.json(await workService.create(authId, req.body));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;
@@ -19,7 +19,7 @@ exports.getAll = async (req, res, next) => {
         const to = req.query.to || null;
         const object_id = req.query.object_id || null;
         const work_id = req.query.supplier_id || null;
-        let result = await completedWorkService.getAll({page, limit, from , to, object_id, work_id});
+        let result = await workService.getAll({page, limit, from , to, object_id, work_id});
         res.json(result)
 
     } catch (err) {
@@ -32,7 +32,7 @@ exports.getOne = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        res.json(await completedWorkService.getOne(id));
+        res.json(await workService.getOne(id));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;
@@ -43,7 +43,7 @@ exports.getOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     let id = req.params.id;
     try{
-        res.status(201).json(await completedWorkService.update(id, req.body));
+        res.status(201).json(await workService.update(id, req.body));
      }catch(err){
          err.statusCode =err.statusCode || 500;
          next(err);
@@ -54,7 +54,7 @@ exports.delete = async (req, res, next) => {
     const id = req.params.id;
 
     try {
-        res.json(await completedWorkService.delete(id));
+        res.json(await workService.delete(id));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;

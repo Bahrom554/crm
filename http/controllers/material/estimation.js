@@ -1,9 +1,9 @@
-const orderMaterialService = require('../usecases/orderMaterial');
+const estimationService = require('../../usecases/material/estimation');
 
 exports.create = async (req, res, next) => {
     try {
         let authId = req.user.id;
-        res.json(await orderMaterialService.create(authId, req.body));
+        res.json(await estimationService.create(authId, req.body));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;
@@ -20,7 +20,7 @@ exports.getAll = async (req, res, next) => {
         const material_id = req.query.material_id ||null;
         const object_id = req.query.object_id || null;
         const supplier_id = req.query.supplier_id || null;
-        let result = await orderMaterialService.getAll({page, limit, from , to, object_id, supplier_id, material_id});
+        let result = await estimationService.getAll({page, limit, from , to, object_id, supplier_id, material_id});
         res.json(result)
 
     } catch (err) {
@@ -33,7 +33,7 @@ exports.getOne = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        res.json(await orderMaterialService.getOne(id));
+        res.json(await estimationService.getOne(id));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;
@@ -44,7 +44,7 @@ exports.getOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     let id = req.params.id;
     try{
-        res.status(201).json(await orderMaterialService.update(id, req.body));
+        res.status(201).json(await estimationService.update(id, req.body));
      }catch(err){
          err.statusCode =err.statusCode || 500;
          next(err);
@@ -55,7 +55,7 @@ exports.delete = async (req, res, next) => {
     const id = req.params.id;
 
     try {
-        res.json(await orderMaterialService.delete(id));
+        res.json(await estimationService.delete(id));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;
