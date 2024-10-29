@@ -12,6 +12,7 @@ const materialRouter = require('./routes/material');
 const workRouter = require('./routes/worker');
 const profileRouter = require('./routes/profile');
 const roleRouter = require('./routes/roles');
+const instrumentRouter = require('./routes/instrument');
 const CONST = require("./utils/constants");
 const dir = CONST.defaults.UPLOAD_DIR;
 const fs = require('fs');
@@ -36,6 +37,7 @@ app.use('/api/v1/users', IsAuth, userRouter);
 app.use('/api/v1/objects', IsAuth, objectRouter);
 app.use('/api/v1/materials', IsAuth, materialRouter);
 app.use('/api/v1/works', IsAuth, workRouter);
+app.use('/api/v1/instruments', IsAuth, instrumentRouter )
 app.use('/api/v1/profile', IsAuth, profileRouter);
 app.use('/api/v1/roles', IsAuth, roleRouter);
 

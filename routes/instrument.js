@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Route();
+const instrumentValidator = require('../http/validation/instrument.js')
 
 router.post('/', permissionMiddleware("instrument:create"), validationMiddleware(instrumentValidator.create), instrumentController.create);
 router.get('/', permissionMiddleware("instrument:list"), validationMiddleware(instrumentValidator.queryParams, 'query'),  instrumentController.getAll);
