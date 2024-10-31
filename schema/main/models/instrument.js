@@ -1,28 +1,29 @@
 
-module.exports = (sequelize, DataTypes)=>{
-    return sequelize.define('instrument',{
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define('instrument', {
         id: {
             autoIncrement: true,
             type: DataTypes.BIGINT,
             primaryKey: true,
         },
         name: {
-         type: DataTypes.STRING,
-         allowNull: false
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
         },
-        detail:{
-        type: DataTypes.STRING,
-        allowNull: true
+        detail: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
         count: {
-         type: DataTypes.INTEGER,
-         defaultValue: 0
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         },
         cost: {
             type: DataTypes.DECIMAL,
             allowNull: true
         },
-        totalCost: {
+        total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: true
         },
@@ -36,7 +37,7 @@ module.exports = (sequelize, DataTypes)=>{
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    },{
+    }, {
         sequelize,
         tableName: 'instruments',
         schema: 'public',

@@ -3,7 +3,7 @@ const workService = require('../../usecases/work/work');
 exports.create = async (req, res, next) => {
     try {
         let authId = req.user.id;
-        res.json(await workService.create(authId, req.body));
+        res.json(await workService.create({creator_id: authId, ...req.body}));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;

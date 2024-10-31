@@ -6,13 +6,7 @@ const moment = require('moment')
 exports.create = async (id, data) => {
 
     await customValidation(data);
-    data.totalCost = data.cost * data.amount;
-    data.creator_id = id;
-    // for(let i=0; i< data.files.length; i++){
-    //     let file_id = data.files[i];
-
-    // }
-
+    data.total_cost = data.cost * data.amount;
     let work = await Models.work.create(data);
     await work.addFiles(data.files);
     return await getWork(work.id);
@@ -124,10 +118,10 @@ async function getWork(id) {
 }
 
 async function customValidation(data) {
-    if (data.work_id) {
-        let d = await Models.work.findByPk(data.work_id);
+    if (data.estimation_id) {
+        let d = await Models.work_estimation.findByPk(data.estimation_id);
         if (!d) {
-            let err = new Error(`work not found! whit this id: ${data.work_id}`);
+            let err = new Error(`work estimate not found! whit this id: ${data.estimation_id}`);
             err.statusCode = 422;
             throw err;
         }
@@ -135,6 +129,15 @@ async function customValidation(data) {
 
     if (data.object_id) {
         let object = await Models.object.findByPk(data.object_id);
+        if (!object) {
+            let err = new Error(`object not found! whit this id: ${data.object_id}`);
+            err.statusCode = 422;
+            throw err;
+        }
+    }
+
+    if (data.worker_id) {
+        let user = await Models.user.findOne({where: {id: data.worker_id, role_id}});
         if (!object) {
             let err = new Error(`object not found! whit this id: ${data.object_id}`);
             err.statusCode = 422;

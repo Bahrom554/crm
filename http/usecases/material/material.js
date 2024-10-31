@@ -140,7 +140,7 @@ async function customValidation(data) {
 
     if (data.supplier_id) {
         let user = await Models.user.findByPk(data.supplier_id,{include: 'role'});
-        if (!user || user?.role?.code != CONSTANTS.role_codes.supplier) {
+        if (!user || user?.role?.code != CONSTANTS.roles.supplier) {
             let err = new Error(`suppliar not found or this user not suppliar! whit this id: ${data.supplier_id}`);
             err.statusCode = 422;
             throw err;

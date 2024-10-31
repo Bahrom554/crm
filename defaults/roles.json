@@ -1,10 +1,18 @@
 [
     {
-        "code": 1,
+        "id": 1,
         "name": "superAdmin"
     },
     {
-        "code": 2,
+        "id": 2,
+        "name": "ceo",
+        "permissions": [
+            "data:create",
+            "data:update"
+        ]
+    },
+    {
+        "id": 3,
         "name": "hr",
         "permissions": [
             "user:create",
@@ -21,7 +29,7 @@
         ]
     },
     {
-        "code": 3,
+        "id": 4,
         "name": "accountant",
         "permissions": [
             "data:create",
@@ -29,7 +37,7 @@
         ]
     },
     {
-        "code": 4,
+        "id": 5,
         "name": "pto",
         "permissions": [
             "object:create",
@@ -54,7 +62,7 @@
         ]
     },
     {
-        "code": 5,
+        "id": 6,
         "name": "mechanic",
         "permissions": [
             "data:create",
@@ -62,7 +70,7 @@
         ]
     },
     {
-        "code": 6,
+        "id": 7,
         "name": "prorab",
         "permissions": [
             "object:list",
@@ -82,18 +90,15 @@
         ]
     },
     {
-        "code": 7,
+        "id": 8,
         "name": "Supplier",
         "permissions": [
             "orderMaterial:list"
         ]
     },
     {
-        "code": 8,
-        "name": "ceo",
-        "permissions": [
-            "data:create",
-            "data:update"
-        ]
+        "id": 9,
+        "name": "worker",
+        "permissions": []
     }
 ]

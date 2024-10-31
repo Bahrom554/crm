@@ -9,7 +9,7 @@ const userRouter = require('./routes/user');
 const fileRouter = require('./routes/file');
 const objectRouter = require('./routes/object');
 const materialRouter = require('./routes/material');
-const workRouter = require('./routes/worker');
+const workRouter = require('./routes/work');
 const profileRouter = require('./routes/profile');
 const roleRouter = require('./routes/roles');
 const instrumentRouter = require('./routes/instrument');
@@ -76,7 +76,7 @@ Databases['main'].authenticate().then(async () => {
     await Databases['main'].sync({
         alter: true
     });
-    await Util.seedUser();
+     await Util.seedUser();
 
     /* Creating uploads directory if it does not exist */
     if (!fs.existsSync(dir)) {

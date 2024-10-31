@@ -25,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        totalCost: {
+        total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },

@@ -29,7 +29,7 @@ module.exports = function (sequelize, DataTypes) {
             key: 'id'
           }
         },
-        totalCost: {
+        total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },

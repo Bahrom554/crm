@@ -1,7 +1,10 @@
 const Models = require('../schema/main/models');
 const config = require('../config/app')();
 const bcrypt = require('bcrypt');
-let roles = require('../defaults/roles.json');
+const path = require("path");
+const fs = require("fs");
+const rolesPath = path.join(__dirname, "../defaults/roles.json");
+const roles = JSON.parse(fs.readFileSync(rolesPath, "utf-8"));
 const CONST = require('../utils/constants')
 
 const makePagination = function (data, options, totalDocs) {
@@ -34,13 +37,43 @@ const getPagination = async function (Model, query, options, order = [], include
 };
 
 
+
+const getOptions = function (query) {
+    let fromDate = query.from;
+    let toDate = query.to;
+    let limit = query.limit
+    let page = query.page
+    let data = {}
+    if (limit && typeof parseInt(limit) === "number") data.limit = parseInt(limit);
+    else data.limit = CONST.response.limit
+    if (page && typeof parseInt(page) === "number") data.page = parseInt(page);
+    else data.page = CONST.response.page
+
+    if (fromDate && typeof parseInt(fromDate) === "number") {
+        data.from = parseInt(fromDate)
+    }
+    if (toDate && typeof parseInt(toDate) === "number") {
+        data.to = parseInt(toDate)
+    }
+    return data;
+}
+
+
+
+
 exports.getPagination = getPagination;
+exports.getOptions = getOptions;
+
+
+
+
+
 
 exports.seedUser = async function () {
-    await createRoles();
+   
+   try{
+    await seedRoles();
     const passwordHash = await bcrypt.hash(config.userPassword, 10);
-    let role = await Models.role.findOne({ where: { code: CONST.role_codes.superadmin}});
-
     await Models.user.findOrCreate({
         where: { username: config.userName }, defaults: {
             firstName: "super",
@@ -48,22 +81,23 @@ exports.seedUser = async function () {
             midName: "admin",
             phone: "999999999",
             password: passwordHash,
-            role_id: role?.id || null
+            role_id: 1
         }
     })
 
+   } catch(err){
+    console.error("Error seeding  data:", err.message);
+    throw err;
+   }
+
 };
 
-async function createRoles() {
-    for (let i = 0; i < roles.length; i++) {
-        let r = roles[i];
-        let role = await Models.role.findOne({ where: { code: r.code } });
-        if (role) {
-            role.permissions = r.permissions;
-            await role.save();
-        }
-        else {
-            await Models.role.create(r);
-        }
-    }
+async function seedRoles() {
+     if(roles.length > 0){
+        await Models.role.destroy({where: {}});
+        await Models.role.bulkCreate(roles, {ignoreDuplicates: true });
+     }else if (data.length === 0) {
+        console.log("No roles to seed");
+      }
+     
 }

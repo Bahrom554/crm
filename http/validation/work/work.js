@@ -1,35 +1,37 @@
 const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
-        estimation_id: Joi.number().required(),
+        estimation_id: Joi.number().unsafe().required(),
         amount: Joi.number().unsafe().required(),
-        cost: Joi.number().unsafe().required(),
-        object_id: Joi.number().required(),
+        cost: Joi.number().unsafe().optional(),
+        object_id: Joi.number().unsafe().required(),
         comment: Joi.string().optional(),
-        files: Joi.array().items(Joi.number()).required()
+        worker_id: Joi.number().unsafe().required(),
+        files: Joi.array().items(Joi.number().unsafe()).required()
     }),
 
     update: Joi.object().keys({
-        estimation_id: Joi.number(),
+        estimation_id: Joi.number().unsafe(),
         amount: Joi.number().unsafe(),
         cost: Joi.number().unsafe(),
-        object_id: Joi.number(),
+        object_id: Joi.number().unsafe(),
         comment: Joi.string().optional(),
-        files: Joi.array().items(Joi.number())
+        worker_id: Joi.number().unsafe().required(),
+        files: Joi.array().items(Joi.number().unsafe())
     }),
 
     queryParams: Joi.object().keys({
         from: Joi.date().optional(),
         to: Joi.date().optional(),
-        page: Joi.number().optional().min(1),
-        limit: Joi.number().optional().min(1),
+        page: Joi.number().unsafe().optional().min(1),
+        limit: Joi.number().unsafe().optional().min(1),
         search: Joi.string().optional().allow(null, ''),
-        estimation_id: Joi.number().optional(),
-        object_id: Joi.number().optional(),
+        estimation_id: Joi.number().unsafe().optional(),
+        object_id: Joi.number().unsafe().optional(),
     }),
 
     id: Joi.object().keys({
-        id: Joi.number().required().min(1),
+        id: Joi.number().unsafe().required().min(1),
     }),
 }
 

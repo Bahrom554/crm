@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         estimation_id: {
             type: DataTypes.BIGINT,
-            allowNull: true,
+            allowNull: false,
             references: {
                 model: {
                     tableName: 'work_estimations'
@@ -27,7 +27,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        totalCost: {
+        total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
@@ -51,10 +51,19 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'id'
             }
         },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
+        worker_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: {
+                    tableName: 'users'
+                },
+                key: 'id'
+            }
+        },
+        status: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
         },
         created_at: {
             type: DataTypes.DATE,

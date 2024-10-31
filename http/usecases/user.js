@@ -22,7 +22,7 @@ exports.create = async (creator_id, data) => {
             ...body
         } = data;
         const hashedPassword = await bcrypt.hash(password, 10);
-        let role = await Models.role.findOne({ where: { id: role_id, code: { [Op.ne]: CONSTANTS.role_codes.superadmin } } });
+        let role = await Models.role.findOne({ where: { id: role_id} });
         const [user, created] = await Models.user.findOrCreate({
             where: {
                 username: username
@@ -165,9 +165,8 @@ exports.update = async (id, data) => {
         data.password = await bcrypt.hash(data.password, 10);
     }
 
-    let role = await Models.role.findOne({ where: { id: data?.role_id || null, code: { [Op.ne]: CONSTANTS.role_codes.superadmin } } });
-    if (!role) delete data.role_id;
-
+    let role = await Models.role.findOne({ where: { id: data?.role_id || null} });
+   
     const [updated, _user] = await Models.user.update(data, {
         where: {
             id: id
@@ -267,7 +266,7 @@ exports.statistics = async function () {
         group: ['user.role_id', 'role.id'],
     });
 
-    let result = data.filter(it => { if (it.role.code == CONSTANTS.role_codes.superadmin) { return false } return true; }).map(it => {
+    let result = data.filter(it => { if (it.role.id === CONSTANTS.roles.superadmin) { return false } return true; }).map(it => {
         return {
             user_count: it.get('userCount'),
             role_id: it.role.id,

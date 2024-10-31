@@ -20,7 +20,7 @@ const middleware = async (req, res, next) => {
             err.statusCode = 404;
             throw err;
         };
-        if (user?.role?.code == CONSTANTS.role_codes.superadmin && authId != userId) {
+        if (user?.role?.id == CONSTANTS.roles.superadmin && authId != userId) {
             throw {
                 statusCode: 403,
                 message: 'Forbidden'

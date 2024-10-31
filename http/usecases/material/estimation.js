@@ -13,8 +13,7 @@ exports.create = async (data) => {
     }
 
     await customValidation(data);
-    data.totalCost = data.cost * data.amount;
-
+    data.total_cost = data.cost * data.amount;
     return Models.material_estimation.create(data);
 
 
@@ -25,6 +24,9 @@ exports.getAll = async (options) => {
     let subQuery = [];
     let include = [{
         model: Models.object,
+    }, {
+        model: Models.material_type,
+        as: 'type'
     }];
     if (options.group_id) {
         subQuery.push({ group_id: options.group_id })
@@ -78,10 +80,10 @@ exports.getOne = async (id) => {
 
 exports.update = async (id, data) => {
 
-    await customValidation(data)
-
-    let oldmaterial_estimation = await Models.material_estimation.findByPk(id);
-    if (!oldmaterial_estimation) {
+    await customValidation(data);
+    let item = await getmaterial_estimation(id);
+    let old_material_estimation = await Models.material_estimation.findByPk(id);
+    if (!old_material_estimation) {
         let err = new Error('material_estimation not found');
         err.statusCode = 404;
         throw err;
@@ -94,11 +96,16 @@ exports.update = async (id, data) => {
         }
     });
     if (material_estimation) {
-        let err = new Error(`material_estimation has created !`);
+        let err = new Error(`code used other materila estimation!`);
         err.statusCode = 422;
         throw err;
     }
-    data.totalCost = data.amount * data.cost;
+
+    if (data.cost || data.amount) {
+        let cost = data.cost || item.cost;
+        let amount = data.amount || item.amount;
+        data.total_cost = cost * amount;
+    }
 
     await Models.material_estimation.update(data, { where: { id: id } });
 
@@ -137,7 +144,8 @@ async function getmaterial_estimation(id) {
 
         },
         {
-            model: Models.group,
+            model: Models.material_type,
+            as: 'type'
 
         }]
     });
@@ -146,14 +154,18 @@ async function getmaterial_estimation(id) {
         err.statusCode = 404;
         throw err;
     }
+
+    material_estimation.cost = parseFloat(material_estimation.cost);
+    material_estimation.total_cost = parseFloat(material_estimation.total_cost);
+    material_estimation.amount = parseFloat(material_estimation.amount);
     return material_estimation;
 }
 
 async function customValidation(data) {
-    if (data.group_id) {
-        let group = await Models.group.findByPk(data.group_id);
+    if (data.type_id) {
+        let group = await Models.material_type.findByPk(data.type_id);
         if (!group) {
-            let err = new Error(`group not found! whit this id: ${data.group_id}`);
+            let err = new Error(`material type not found! whit this id: ${data.type_id}`);
             err.statusCode = 422;
             throw err;
         }

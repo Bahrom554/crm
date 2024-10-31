@@ -30,7 +30,7 @@ exports.update = async (id, data) => {
     if(data.name){
         let work_type = await Models.work_type.findOne({
             where: {
-                name: data.name || null,
+                name: data.name,
                 id: {
                     [Op.ne]: id
                 }
@@ -41,7 +41,7 @@ exports.update = async (id, data) => {
             err.statusCode = 422;
             throw err;
         }
-        await Models.work_type.update(data, { where: { id: id } });
+        await Models.work_type.update({name: data.name}, { where: { id: id } });
     
     
     }

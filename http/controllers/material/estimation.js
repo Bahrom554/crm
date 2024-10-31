@@ -3,7 +3,7 @@ const estimationService = require('../../usecases/material/estimation');
 exports.create = async (req, res, next) => {
     try {
         let authId = req.user.id;
-        res.json(await estimationService.create(authId, req.body));
+        res.json(await estimationService.create({creator_id:authId, ...req.body}));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;

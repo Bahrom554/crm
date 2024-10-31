@@ -34,7 +34,7 @@ exports.login = (data) => {
 
             const token = jwt.sign(
                 {
-                    role: loadedUser?.role?.code || null,
+                    role: loadedUser?.role?.id || null,
                     id: loadedUser.id
                 },
                 config.jwtSecretUser,

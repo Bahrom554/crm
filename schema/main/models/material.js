@@ -33,29 +33,11 @@ module.exports = function (sequelize, DataTypes) {
             key: 'id'
         }
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        files:{
-         type: DataTypes.JSONB,
-         allowNull: true
-        },
         status: {
             type: DataTypes.STRING,
             defaultValue: 'waiting'
         },
         supplier_id: {
-            type: DataTypes.BIGINT,
-            allowNull: true,
-            references: {
-                model: {
-                    tableName: 'users'
-                },
-                key: 'id'
-            }
-        },
-        worker_id: {
             type: DataTypes.BIGINT,
             allowNull: true,
             references: {
