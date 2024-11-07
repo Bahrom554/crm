@@ -3,7 +3,7 @@ const object = {
     create: Joi.object().keys({
         estimation_id: Joi.number().unsafe().required(),
         amount: Joi.number().unsafe().required(),
-        cost: Joi.number().unsafe().optional(),
+        cost: Joi.number().unsafe().required(),
         object_id: Joi.number().unsafe().required(),
         comment: Joi.string().optional(),
         worker_id: Joi.number().unsafe().required(),
@@ -16,7 +16,7 @@ const object = {
         cost: Joi.number().unsafe(),
         object_id: Joi.number().unsafe(),
         comment: Joi.string().optional(),
-        worker_id: Joi.number().unsafe().required(),
+        // worker_id: Joi.number().unsafe(),
         files: Joi.array().items(Joi.number().unsafe())
     }),
 

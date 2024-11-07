@@ -27,6 +27,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
+        paid: {
+            type: DataTypes.DECIMAL,
+            defaultValue: 0
+        },
         total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: false

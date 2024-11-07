@@ -4,12 +4,12 @@ const CONSTANTS = require('../../../utils/constants');
 const { Op } = require('sequelize');
 const moment = require('moment')
 
-exports.create = async (id, data) => {
+exports.create = async (data) => {
 
      await customValidation(data);
-     data.creator_id = id;
-     
-    return Models.material.create(data);
+   let material =  await Models.material.create(data);
+    await material.addFiles(data.files);
+    return await getmaterial(material.id);
 }
 
 exports.getAll = async (options) => {
@@ -107,12 +107,12 @@ async function getmaterial(id) {
             as: 'supplier'
         },
         {
-            model: Models.material,
+            model: Models.material_estimation,
 
         }]
     });
     if (!material) {
-        let err = new Error('order-material not found');
+        let err = new Error('material not found');
         err.statusCode = 404;
         throw err;
     }
@@ -120,10 +120,10 @@ async function getmaterial(id) {
 }
 
 async function customValidation(data) {
-    if (data.material_id) {
-        let group = await Models.material.findByPk(data.material_id);
+    if (data.work_id) {
+        let group = await Models.work.findOne({where: {id: data.work_id, worker_id: data.creator_id }});
         if (!group) {
-            let err = new Error(`material not found! whit this id: ${data.material_id}`);
+            let err = new Error(`work not found! whit this id: ${data.work_id}`);
             err.statusCode = 422;
             throw err;
         }
@@ -139,9 +139,9 @@ async function customValidation(data) {
     }
 
     if (data.supplier_id) {
-        let user = await Models.user.findByPk(data.supplier_id,{include: 'role'});
-        if (!user || user?.role?.code != CONSTANTS.roles.supplier) {
-            let err = new Error(`suppliar not found or this user not suppliar! whit this id: ${data.supplier_id}`);
+        let user = await Models.user.findOne({where: {id: data.supplier_id, role_id: 8}});
+        if (!user) {
+            let err = new Error(`suppliar not found! whit this id: ${data.supplier_id}`);
             err.statusCode = 422;
             throw err;
         }

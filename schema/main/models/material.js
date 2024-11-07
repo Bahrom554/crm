@@ -5,6 +5,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BIGINT,
             primaryKey: true,
         }, 
+        definition: {
+        type: DataTypes.STRING,
+        allowNull: true
+        },
         amount: {
             type: DataTypes.DECIMAL,
             allowNull: false

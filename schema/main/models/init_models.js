@@ -36,7 +36,7 @@ function initModels(sequelize) {
 
     const instrument = _instrument(sequelize, DataTypes);
 
-    user.belongsTo(role, { foreignKey: 'role_id', onDelete: 'SET NULL' });
+    user.belongsTo(role, { foreignKey: 'role_id'});
     role.hasMany(user, { as: 'users', foreignKey: 'role_id' });
     user.belongsToMany(file, { as: 'files', through: 'user_file', onDelete: 'cascade' });
     user.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
@@ -57,6 +57,7 @@ function initModels(sequelize) {
 
     
     work.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
+    work.belongsTo(user, { as: 'worker', foreignKey: 'worker_id' });
     work.belongsTo(work_estimation, { foreignKey: 'estimation_id' });
     work.belongsToMany(file, { through: 'work_file' });
     object.hasMany(work, {foreignKey:'object_id'});

@@ -3,7 +3,7 @@ const Utils = require('../../../utils/utils');
 const { Op } = require('sequelize');
 const moment = require('moment')
 
-exports.create = async (id, data) => {
+exports.create = async (data) => {
 
     await customValidation(data);
     data.total_cost = data.cost * data.amount;
@@ -101,11 +101,15 @@ async function getWork(id) {
             model: Models.object,
         },
         {
-            model: Models.work,
+            model: Models.work_estimation,
 
         },
         {
             model: Models.file,
+
+        },{
+            model: Models.user,
+            as:'worker'
 
         }]
     });
@@ -137,9 +141,9 @@ async function customValidation(data) {
     }
 
     if (data.worker_id) {
-        let user = await Models.user.findOne({where: {id: data.worker_id, role_id}});
-        if (!object) {
-            let err = new Error(`object not found! whit this id: ${data.object_id}`);
+        let user = await Models.user.findOne({where: {id: data.worker_id, role_id: 9}});
+        if (!user) {
+            let err = new Error(`worker not found! whit this id: ${data.worker_id}`);
             err.statusCode = 422;
             throw err;
         }
