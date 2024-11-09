@@ -83,6 +83,9 @@ exports.getAll = async (options) => {
     include = [{
         model: Models.role,
         as: "role",
+    },{
+        model: Models.file,
+        as: "files"
     }];
     if (options.role_id) {
         subQuery.push({ role_id: options.role_id })
