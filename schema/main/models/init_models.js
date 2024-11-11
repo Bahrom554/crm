@@ -15,6 +15,7 @@ const _material_type = require('./material_type');
 const _material = require('./material');
 const _instrument = require('./instrument');
 
+const _permission = require('./permission')
 
 
 function initModels(sequelize) {
@@ -36,9 +37,11 @@ function initModels(sequelize) {
 
     const instrument = _instrument(sequelize, DataTypes);
 
+    const permission = _permission(sequelize, DataTypes);
+
     user.belongsTo(role, { foreignKey: 'role_id'});
-    role.hasMany(user, { as: 'users', foreignKey: 'role_id' });
-    user.belongsToMany(file, { as: 'files', through: 'user_file', onDelete: 'cascade' });
+    role.hasMany(user, { as: 'users', foreignKey: 'role_id'});
+    user.belongsToMany(file, { as: 'files', through: 'user_file'});
     user.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
     file.belongsToMany(user, { as: 'users', through: 'user_file' });
     object.belongsTo(file, { as: 'file', foreignKey: 'file_id' });
@@ -63,8 +66,9 @@ function initModels(sequelize) {
     object.hasMany(work, {foreignKey:'object_id'});
     work.belongsTo(object, {foreignKey:"object_id"});
 
-    work.belongsToMany(instrument, { as: 'instruments', through: 'work_instrument',foreignKey: 'work_id', otherKey: 'instrument_id', onDelete: 'cascade' });
-    instrument.belongsToMany(work, { as: 'works', through: 'work_instrument',foreignKey: 'instrument_id', otherKey: 'work_id', onDelete: 'cascade' });
+    work.belongsToMany(instrument, { as: 'instruments', through: 'work_instrument',foreignKey: 'work_id', otherKey: 'instrument_id'});
+    instrument.belongsToMany(work, { as: 'works', through: 'work_instrument',foreignKey: 'instrument_id', otherKey: 'work_id'});
+    instrument.belongsTo(file, {foreignKey: 'file_id'});
 
     material.belongsTo(user, { as: 'creator', foreignKey: 'creator_id' });
     material.belongsTo(material_estimation, { foreignKey: 'estimation_id' });
@@ -100,7 +104,8 @@ function initModels(sequelize) {
         work_type,
         work_estimation,
         work,
-        instrument
+        instrument,
+        permission
 
     }
 

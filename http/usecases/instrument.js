@@ -19,6 +19,9 @@ exports.getAll = async (query) => {
     let search = query.search || null;
     let option = Util.getOptions(query);
     let instrument_query = {};
+    let include =[{
+        model: Models.file
+    }]
 
     if (option.from && !option.to) {
         instrument_query.created_at = {
@@ -40,7 +43,7 @@ exports.getAll = async (query) => {
     }
 
 
-    return Util.getPagination(Models.instrument, instrument_query, option)
+    return Util.getPagination(Models.instrument, instrument_query, option, [], include)
 }
 
 exports.getOne = async (id) => {
@@ -87,7 +90,7 @@ return { message: 'instrument was deleted successfully.' };
 
 async function findOne(id) {
 
-    let item = await Models.instrument.findByPk(id);
+    let item = await Models.instrument.findOne({where: {id: id}, include: {model: Models.file}});
     if (!item) {
         const error = new Error('Instrument not found');
         error.statusCode = 404; // Set the status code

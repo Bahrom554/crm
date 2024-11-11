@@ -77,7 +77,7 @@ exports.create = async (creator_id, data) => {
 }
 
 exports.getAll = async (options) => {
-    let query = {};
+    let query = {role_id:{[Op.ne]: 1}};
     let subQuery = [];
     let include;
     include = [{
@@ -150,13 +150,36 @@ exports.getOne = async (id) => {
     return await getUser(id);
 }
 
+exports.getProfile = async (id) => {
+
+    let user = await Models.user.findOne({
+        where: {
+            id: id 
+        },
+        include: [{
+            model: Models.file,
+            as: "files"
+        }, {
+            model: Models.role,
+            as: 'role'
+        }]
+    });
+    if (!user) {
+        let err = new Error('User not found');
+        err.statusCode = 404;
+        throw err;
+    }
+    return user;
+}
+
 exports.update = async (id, data) => {
     let user = await Models.user.unscoped().findOne({
         where: {
             username: data.username,
             id: {
                 [Op.ne]: id
-            }
+            },
+            role_id:{[Op.ne]: 1}
         },
     });
     if (user) {
@@ -168,8 +191,6 @@ exports.update = async (id, data) => {
         data.password = await bcrypt.hash(data.password, 10);
     }
 
-    let role = await Models.role.findOne({ where: { id: data?.role_id || null} });
-   
     const [updated, _user] = await Models.user.update(data, {
         where: {
             id: id
@@ -217,7 +238,8 @@ exports.update = async (id, data) => {
 exports.delete = async function (id) {
     let account = await Models.user.destroy({
         where: {
-            id: id
+            id: id,
+            role_id:{[Op.ne]: 1}
         }
     });
 
@@ -232,12 +254,10 @@ exports.delete = async function (id) {
     };
 };
 
-
-
 async function getUser(id) {
     let user = await Models.user.findOne({
         where: {
-            id: id
+            id: id, role_id:{[Op.ne]: 1} 
         },
         include: [{
             model: Models.file,
@@ -257,6 +277,7 @@ async function getUser(id) {
 
 exports.statistics = async function () {
     let data = await Models.user.findAll({
+        where: {role_id: {[Op.ne]: 1}},
         attributes: [
             [sequelize.fn('COUNT', sequelize.col('*')), 'userCount'],
             'user.role_id',
@@ -269,7 +290,7 @@ exports.statistics = async function () {
         group: ['user.role_id', 'role.id'],
     });
 
-    let result = data.filter(it => { if (it.role.id === CONSTANTS.roles.superadmin) { return false } return true; }).map(it => {
+    let result = data.map(it => {
         return {
             user_count: it.get('userCount'),
             role_id: it.role.id,

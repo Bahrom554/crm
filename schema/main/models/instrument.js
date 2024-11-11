@@ -23,6 +23,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL,
             allowNull: true
         },
+        file_id: {
+            type: DataTypes.BIGINT,
+            allowNull: true,
+            references: {
+                model: { tableName: 'files' },
+                key: 'id'
+            }
+        },
         total_cost: {
             type: DataTypes.DECIMAL,
             allowNull: true

@@ -6,6 +6,7 @@ const object = {
          detail: Joi.string().allow('', null),
          count: Joi.number().unsafe().required(),
          cost: Joi.number().unsafe().optional().allow(null),
+         file_id: Joi.number().unsafe().optional()
    
       })
    ),
@@ -15,6 +16,7 @@ const object = {
       detail: Joi.string(),
       count: Joi.number().unsafe(),
       cost: Joi.number().unsafe(),
+      file_id: Joi.number().unsafe().optional()
 
    }),
 

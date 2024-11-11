@@ -1,10 +1,3 @@
-const Models = require('../schema/main/models');
-const config = require('../config/app')();
-const bcrypt = require('bcrypt');
-const path = require("path");
-const fs = require("fs");
-const rolesPath = path.join(__dirname, "../defaults/roles.json");
-const roles = JSON.parse(fs.readFileSync(rolesPath, "utf-8"));
 const CONST = require('../utils/constants')
 
 const makePagination = function (data, options, totalDocs) {
@@ -65,51 +58,3 @@ exports.getPagination = getPagination;
 exports.getOptions = getOptions;
 
 
-
-
-
-
-exports.seedUser = async function () {
-   
-   try{
-    await seedRoles();
-    const passwordHash = await bcrypt.hash(config.userPassword, 10);
-    let user = await Models.user.findOne({where: { username: config.userName }});
-  if(user){
-    await Models.user.update( {
-        username: config.userName,
-        firstName: "super",
-        lastName: "admin",
-        midName: "admin",
-        phone: "999999999",
-        password: passwordHash,
-        role_id: 1
-},
-{where: { username: config.userName }})
-}else{
-    await Models.user.create({
-        username: config.userName,
-        firstName: "super",
-        lastName: "admin",
-        midName: "admin",
-        phone: "999999999",
-        password: passwordHash,
-        role_id: 1
-})
-}
-   } catch(err){
-    console.error("Error seeding  data:", err.message);
-    throw err;
-   }
-
-};
-
-async function seedRoles() {
-     if(roles.length > 0){
-        // await Models.role.destroy({where: {}});
-        await Models.role.bulkCreate(roles, {ignoreDuplicates: true });
-     }else if (data.length === 0) {
-        console.log("No roles to seed");
-      }
-     
-}

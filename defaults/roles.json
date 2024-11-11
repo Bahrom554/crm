@@ -45,20 +45,24 @@
             "object:list",
             "object:one",
             "object:delete",
-            "material:create",
-            "material:update",
-            "material:list",
-            "material:one",
-            "material:delete",
-            "work:create",
-            "work:update",
-            "work:list",
-            "work:one",
-            "work:delete",
-            "group:create",
-            "group:list",
-            "group:update",
-            "group:delete"
+            "material-estimate:create",
+            "material-estimate:update",
+            "material-estimate:list",
+            "material-estimate:one",
+            "material-estimate:delete",
+            "work-estimate:create",
+            "work-estimate:update",
+            "work-estimate:list",
+            "work-estimate:one",
+            "work-estimate:delete",
+            "work-type:create",
+            "work-type:list",
+            "work-type:update",
+            "work-type:delete",
+            "material-type:create",
+            "material-type:list",
+            "material-type:update",
+            "material-type:delete"
         ]
     },
     {
@@ -74,19 +78,18 @@
         "name": "prorab",
         "permissions": [
             "object:list",
-            "material:list",
             "user:list",
+            "work-estimate:list",
+            "work:create",
             "work:list",
-            "completedWork:create",
-            "completedWork:list",
-            "completedWork:one",
-            "completedWork:update",
-            "completedWork:delete",
-            "orderMaterial:create",
-            "orderMaterial:list",
-            "orderMaterial:one",
-            "orderMaterial:update",
-            "orderMaterial:delete"
+            "work:update",
+            "work:delete",
+            "material:create",
+            "material:list",
+            "material:update",
+            "material:delete"
+            
+            
         ]
     },
     {

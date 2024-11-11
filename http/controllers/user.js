@@ -42,7 +42,7 @@ exports.getOne = async (req, res, next) => {
 exports.getProfile = async (req, res, next) => {
     try {
         const id = req.user.id;
-        res.json(await userService.getOne(id));
+        res.json(await userService.getProfile(id));
 
     } catch (err) {
         err.statusCode = err.statusCode || 500;

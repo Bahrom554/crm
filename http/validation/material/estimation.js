@@ -2,7 +2,6 @@ const Joi = require('joi');
 const object = {
     create: Joi.object().keys({
         code: Joi.string().max(10).required(),
-        name: Joi.string().required(),
         unity: Joi.string().max(10).required(),
         amount: Joi.number().unsafe().optional().allow(null),
         cost: Joi.number().unsafe().optional().allow(null),
@@ -12,7 +11,6 @@ const object = {
 
     update: Joi.object().keys({
         code: Joi.string().max(10),
-        name: Joi.string(),
         unity: Joi.string(),
         amount: Joi.number().unsafe().optional().allow(null),
         cost: Joi.number().unsafe().optional().allow(null),

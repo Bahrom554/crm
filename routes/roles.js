@@ -5,8 +5,7 @@ const roleValidator = require('../http/validation/role');
 const permissionMiddleware =require('../http/middlewares/check-permission');
 
 router.get('/',permissionMiddleware("role:list"),  roleController.getRoles);
-router.put('/:id',permissionMiddleware("role:update"), validationMiddleware(roleValidator.update), roleController.update);
-
+router.put('/:id',permissionMiddleware("superadmin"), validationMiddleware(roleValidator.update), roleController.update);
 
 
 

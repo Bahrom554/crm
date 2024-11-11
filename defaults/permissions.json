@@ -1,0 +1,141 @@
+[
+    {
+        "name": "instrument_create",
+        "value": "instrument:create"
+    },{
+        "name": "instrument_list",
+        "value": "instrument:list"
+    },{
+        "name": "instrument_one",
+        "value": "instrument:one"
+    },{
+        "name": "instrument_update",
+        "value": "instrument:update"
+    },{
+        "name": "instrument_delete",
+        "value": "instrument:delete"
+    },{
+        "name": "material_type_create",
+        "value": "material-type:create"
+    },{
+        "name": "material_type_list",
+        "value": "material-type:list"
+    },{
+        "name": "material_type_update",
+        "value": "material-type:update"
+    },{
+        "name": "material_type_delete",
+        "value": "material-type:delete"
+    },{
+        "name": "material_estimate_create",
+        "value": "material-estimate:create"
+    },{
+        "name": "material_estimate_list",
+        "value": "material-estimate:list"
+    },{
+        "name": "material_estimate_one",
+        "value": "material-estimate:one"
+    },{
+        "name": "material_estimate_update",
+        "value": "material-estimate:update"
+    },{
+        "name": "material_estimate_delete",
+        "value": "material-estimate:delete"
+    },{
+        "name": "material_create",
+        "value": "material:create"
+    },{
+        "name": "material_list",
+        "value": "material:list"
+    },{
+        "name": "material_update",
+        "value": "material:update"
+    },{
+        "name": "material_delete",
+        "value": "material:delete"
+    },{
+        "name": "object_create",
+        "value": "object:create"
+    },{
+        "name": "object_list",
+        "value": "object:list"
+    },{
+        "name": "object_one",
+        "value": "object:one"
+    },{
+        "name": "object_update",
+        "value": "object:update"
+    },{
+        "name": "object_delete",
+        "value": "object:delete"
+    },{
+        "name": "object_assign_user",
+        "value": "object:assign-user"
+    },{
+        "name": "role_list",
+        "value": "role:list"
+    },{
+        "name": "role_update",
+        "value": "role:update"
+    },{
+        "name": "user_statistics",
+        "value": "user:statistics"
+    },{
+        "name": "user_create",
+        "value": "user:create"
+    },{
+        "name": "user_list",
+        "value": "user:list"
+    },{
+        "name": "user_one",
+        "value": "user:one"
+    },{
+        "name": "user_update",
+        "value": "user:update"
+    },{
+        "name": "user_delete",
+        "value": "user:delete"
+    },{
+        "name": "work_type_create",
+        "value": "work-type:create"
+    },{
+        "name": "work_type_list",
+        "value": "work-type:list"
+    },{
+        "name": "work_type_update",
+        "value": "work-type:update"
+    },{
+        "name": "work_type_delete",
+        "value": "work-type:delete"
+    },{
+        "name": "work_estimate_create",
+        "value": "work-estimate:create"
+    },{
+        "name": "work_estimate_list",
+        "value": "work-estimate:list"
+    },{
+        "name": "work_estimate_one",
+        "value": "work-estimate:one"
+    },{
+        "name": "work_estimate_update",
+        "value": "work-estimate:update"
+    },{
+        "name": "work_estimate_delete",
+        "value": "work-estimate:delete"
+    },{
+        "name": "work_create",
+        "value": "work:create"
+    },{
+        "name": "work_list",
+        "value": "work:list"
+    },{
+        "name": "work_one",
+        "value": "work:one"
+    },{
+        "name": "work_update",
+        "value": "work:update"
+    },{
+        "name": "work_delete",
+        "value": "work:delete"
+    }
+]
