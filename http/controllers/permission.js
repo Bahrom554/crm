@@ -1,6 +1,6 @@
 const Models = require('../../schema/main/models');
 const Utils = require('../../utils/utils');
-
+const {Op} = require('sequelize');
 exports.getAll = async (req, res, next) => {
     try {
         const page = req.query.page || 1;
