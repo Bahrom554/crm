@@ -6,6 +6,7 @@ const validationMiddleware = require('../http/middlewares/validator');
 const fileValidator = require('../http/validation/file')
 
 router.post('/single', upload.single('file'), fileController.save);
+router.post('/from-xls',upload.single('file'), validationMiddleware(fileValidator.xls),fileController.xlsImport)
 router.post('/multiple',upload.array('file',5000), fileController.saveMany);
 router.delete('/:id', fileController.delete);
 module.exports = router;

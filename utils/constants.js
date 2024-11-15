@@ -19,3 +19,5 @@ exports.response = {
     page: 1,
     limit: 20
 }
+
+exports.xls_types = ['material-estimate','work-estimate']

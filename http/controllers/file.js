@@ -57,3 +57,21 @@ exports.fileInfo = async (req, res, next) => {
         next(err);
     }
 }
+
+exports.xlsImport = async (req, res, next) => {
+    try {
+        let file = req.file;
+        if (!req.file) {
+            let err = new Error("File is required");
+            err.statusCode = 422;
+            next(err);
+        } else {
+            await fileService.xlsImport(file, type);
+            res.status(200).json({message: "success"});
+        }
+
+    } catch (err) {
+        err.statusCode = err.statusCode || 500;
+        next(err);
+    }
+}
