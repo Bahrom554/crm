@@ -61,12 +61,14 @@ exports.fileInfo = async (req, res, next) => {
 exports.xlsImport = async (req, res, next) => {
     try {
         let file = req.file;
+        let {type, object_id}=req.body;
+        let authId = req.user.id;
         if (!req.file) {
             let err = new Error("File is required");
             err.statusCode = 422;
             next(err);
         } else {
-            await fileService.xlsImport(file, type);
+            await fileService.xlsImport(file, type, object_id, authId);
             res.status(200).json({message: "success"});
         }
 

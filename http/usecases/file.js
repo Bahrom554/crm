@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const mime = require('mime-types');
 const fileType = require('file-type');
 const Constants = require('../../utils/constants');
+const XLSX = require('xlsx');
 
 
 exports.save = async function (data) {
@@ -141,9 +142,59 @@ exports.delete = async function (id) {
 
 }
 
-exports.xlsImport = async function(file, type){
-   if(type ==='material-estimate'){
+exports.xlsImport = async function(file, type, object_id, creator_id){
+    const workbook = XLSX.readFile(file.path);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }); 
+    rows.shift();
+    const object = await Models.object.findByPk(object_id);
+    if (!object) {
+        throw { statusCode: 400, message: 'Invalild object id' }}
     
+   if(type ==='material-estimate'){
+    const materialTypesMap = {};
+
+    for (const row of rows) {
+      const materialTypeName = row[1];
+      const materialCode = row[2];
+      const unity = row[3];
+      const amount = row[5]?.toString();
+      const cost = row[6]?.toString();;
+      const total_cost = row[7]?.toString();
+
+      if (!materialTypeName || !materialCode || !unity || isNaN(amount) || isNaN(cost)) {
+        continue; // Skip invalid rows
+      }
+
+      // Ensure MaterialType exists
+      if (!materialTypesMap[materialTypeName]) {
+        const [materialType] = await Models.material_type.findOrCreate({
+          where: { name: materialTypeName },
+        });
+        materialTypesMap[materialTypeName] = materialType.id;
+      }
+
+      const existingEstimate = await Models.material_estimation.findOne({
+        where: {object_id,code: materialCode},
+      });
+    
+      if (existingEstimate) {
+        console.log(`Skipping duplicate: object_id=${object_id}, code=${materialCode}`);
+        continue; // Skip duplicates
+      }
+      
+      await Models.material_estimation.create({
+        object_id,
+        code: materialCode,
+        unity,
+        amount,
+        cost,
+        total_cost,
+        creator_id,
+        type_id: materialTypesMap[materialTypeName]
+    });
+    }
+
    } 
 }
 
@@ -164,11 +215,3 @@ async function deleteFilePath(filePath) {
     });
 }
 
-function readXLSX(filePath) {
-    const workbook = xlsx.readFile(filePath); 
-    const sheetName = workbook.SheetNames[0]; 
-    const sheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(sheet, { header: 1 }); 
-  
-    return data;
-  }
