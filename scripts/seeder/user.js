@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
  (async() =>{
    try{
      const passwordHash = await bcrypt.hash(config.userPassword, 10);
-     await Models.user.findOne({where: { username: config.userName },
+     await Models.user.findOrCreate({where: { username: config.userName },
          defaults:{
              firstName: "super",
          lastName: "admin",
